@@ -23,6 +23,7 @@
     <ClInclude Include="RenderUtils.hpp" />
     <ClInclude Include="callbacks.hpp" />
     <ClInclude Include="objects\Particle.h" />
+    <ClInclude Include="objects\Proyectile.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Render">
