@@ -1,8 +1,11 @@
 #include "Particle.h"
 
-Particle::Particle(Vector3 Pos, Vector3 Vel)
+Particle::Particle(Vector3 Pos, Vector3 Vel, Vector3 a_, float dumping_)
 {
 	vel = Vel;
+
+	dumping = dumping_;
+	a = a_;
 
 	pose = physx::PxTransform(Pos);
 
@@ -22,4 +25,7 @@ void Particle::integrate(double t)
 {
 	// p(i+1) = p(i) + v * t
 	pose.p = pose.p + vel * t;
+
+	// vf = v0*d^t + a*t
+	vel = vel * pow(dumping, t) + a * t;
 }

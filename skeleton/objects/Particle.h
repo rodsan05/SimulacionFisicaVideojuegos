@@ -4,7 +4,7 @@
 class Particle
 {
 public:
-	Particle(Vector3 Pos, Vector3 Vel);
+	Particle(Vector3 Pos, Vector3 Vel, Vector3 a_, float dumping_);
 	~Particle();
 
 	void integrate(double t);
@@ -16,5 +16,8 @@ private:
 
 	Vector4 color;
 	int colorFactor;
+
+	Vector3 a;
+	float dumping;
 };
 
