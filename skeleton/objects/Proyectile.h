@@ -24,10 +24,25 @@ public:
 			lifeTime = 1000;
 			break;
 		case CannonBall:
-			break;
+			speed = 150;
+			gravity = 30;
+			dumping = 0.8;
+			radius = 7;
+			lifeTime = 2000;
+		break;
 		case Laser:
+			speed = 10000;
+			gravity = 0;
+			dumping = 0.999;
+			radius = 1;
+			lifeTime = 2000;
 			break;
 		case Misile:
+			speed = 50;
+			gravity = 0;
+			dumping = 0.999;
+			radius = 5;
+			lifeTime = 4000;
 			break;
 		case Fireball:
 			break;

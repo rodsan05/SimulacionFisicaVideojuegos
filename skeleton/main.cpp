@@ -32,6 +32,8 @@ PxDefaultCpuDispatcher* gDispatcher = NULL;
 PxScene* gScene = NULL;
 ContactReportCallback gContactReportCallback;
 
+ProyectileType proyectile;
+
 std::vector<Particle*> particles;
 
 
@@ -58,6 +60,8 @@ void initPhysics(bool interactive)
 	sceneDesc.filterShader = contactReportFilterShader;
 	sceneDesc.simulationEventCallback = &gContactReportCallback;
 	gScene = gPhysics->createScene(sceneDesc);
+
+	proyectile = ProyectileType::Bullet;
 }
 
 
@@ -117,9 +121,20 @@ void keyPress(unsigned char key, const PxTransform& camera)
 	switch (toupper(key))
 	{
 		case 'B': 
-			particles.push_back(new Proyectile(ProyectileType::Bullet, cam->getTransform().p + cam->getDir()*5, cam->getDir()));
+			particles.push_back(new Proyectile(proyectile, cam->getTransform().p + cam->getDir()*5, cam->getDir()));
 			break;
-		//case ' ':	break;
+		case '1':
+			proyectile = Bullet;
+			break;
+		case '2':
+			proyectile = CannonBall;
+			break;
+		case '3':
+			proyectile = Laser;
+			break;
+		case '4':
+			proyectile = Misile;
+			break;
 	case ' ':
 	{
 		break;
