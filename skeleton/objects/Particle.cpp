@@ -1,10 +1,10 @@
 #include "Particle.h"
 
-Particle::Particle() : vel(), dumping(), a(), pose(), color(), renderItem()
+Particle::Particle() : vel(), dumping(), a(), pose(), color(), renderItem(), lifeTime(), m()
 {
 }
 
-Particle::Particle(Vector3 Pos, Vector3 Vel, Vector3 a_, float dumping_, float scale_, Color color_, float m_)
+Particle::Particle(Vector3 Pos, Vector3 Vel, Vector3 a_, float dumping_, float scale_, Color color_, float lifeTime_, float lifeDist_, float m_)
 {
 	vel = Vel;
 
@@ -17,14 +17,29 @@ Particle::Particle(Vector3 Pos, Vector3 Vel, Vector3 a_, float dumping_, float s
 
 	renderItem = new RenderItem(CreateShape(physx::PxSphereGeometry(scale_)), &pose, color);
 
-	RegisterRenderItem(renderItem);
+	//RegisterRenderItem(renderItem);
 
 	m = m_;
+
+	lifeTime = lifeTime_;
+	lifeDistance = lifeDist_;
+
+	initPos = Pos;
+	iniTime = glutGet(GLUT_ELAPSED_TIME);
 }
 
 Particle::~Particle()
 {
 	DeregisterRenderItem(renderItem);
+}
+
+bool Particle::isAlive()
+{
+	return alive;
+}
+void Particle::setAlive(bool set)
+{
+	alive = set;
 }
 
 void Particle::integrate(double t)
@@ -34,9 +49,33 @@ void Particle::integrate(double t)
 
 	// vf = v0*d^t + a*t
 	vel = vel * pow(dumping, t) + a * t;
+
+	//comprueba si debe morir por tiempo
+	if (lifeTime != -1) 
+	{
+		auto time = glutGet(GLUT_ELAPSED_TIME);
+
+		auto elapsedTime = time - iniTime;
+
+		if (elapsedTime > lifeTime) 
+		{
+			alive = false;
+		}
+	}
+
+	//comprueba si debe morir por distancia
+	if (lifeDistance != -1) 
+	{
+		auto distance = (pose.p - initPos).magnitudeSquared();
+
+		if (distance > pow(lifeDistance, 2)) 
+		{
+			alive = false;
+		}
+	}
 }
 
-void Particle::setParticle(Vector3 Pos, Vector3 Vel, Vector3 a_, float dumping_, float scale_, Color color_, float m_)
+void Particle::setParticle(Vector3 Pos, Vector3 Vel, Vector3 a_, float dumping_, float scale_, Color color_, float lifeTime_, float lifeDist_, float m_)
 {
 	vel = Vel;
 
@@ -49,7 +88,11 @@ void Particle::setParticle(Vector3 Pos, Vector3 Vel, Vector3 a_, float dumping_,
 
 	renderItem = new RenderItem(CreateShape(physx::PxSphereGeometry(scale_)), &pose, color);
 
-	RegisterRenderItem(renderItem);
-
 	m = m_;
+
+	lifeTime = lifeTime_;
+	lifeDistance = lifeDist_;
+
+	initPos = Pos;
+	iniTime = glutGet(GLUT_ELAPSED_TIME);
 }

@@ -13,7 +13,7 @@ public:
 	Proyectile(ProyectileType type, Vector3 pos, Vector3 dir)
 	{
 		float speed = 1, gravity = 1, dumping = 0.999, radius = 1;
-
+		double lifeTime = -1, lifeDist = -1;
 		switch (type)
 		{
 		case Bullet:
@@ -21,6 +21,7 @@ public:
 			gravity = 1;
 			dumping = 0.999;
 			radius = 1;
+			lifeTime = 1000;
 			break;
 		case CannonBall:
 			break;
@@ -34,7 +35,7 @@ public:
 			break;
 		}
 
-		setParticle(pos, dir.getNormalized() * speed, { 0, -gravity, 0 }, dumping, radius, { 0.5, 0.5, 0.5, 1 });
+		setParticle(pos, dir.getNormalized() * speed, { 0, -gravity, 0 }, dumping, radius, { 0.5, 0.5, 0.5, 1 }, lifeTime, lifeDist);
 	}
 	~Proyectile() 
 	{

@@ -71,8 +71,19 @@ void stepPhysics(bool interactive, double t)
 	gScene->simulate(t);
 	gScene->fetchResults(true);
 
-	for (auto p : particles)
-		p->integrate(t);
+	for (int i = 0; i < particles.size(); i++) 
+	{
+		auto p = particles[i];
+
+		if (p->isAlive())
+			p->integrate(t);
+
+		else 
+		{
+			delete p;
+			particles.erase(particles.begin() + i);
+		}
+	}
 }
 
 // Function to clean data
