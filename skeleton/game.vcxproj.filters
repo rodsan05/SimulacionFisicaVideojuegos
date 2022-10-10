@@ -11,6 +11,8 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="callbacks.cpp" />
     <ClCompile Include="objects\Particle.cpp" />
+    <ClCompile Include="objects\GaussianParticleGenerator.cpp" />
+    <ClCompile Include="objects\UniformParticleGenerator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core.hpp" />
@@ -24,6 +26,9 @@
     <ClInclude Include="callbacks.hpp" />
     <ClInclude Include="objects\Particle.h" />
     <ClInclude Include="objects\Proyectile.h" />
+    <ClInclude Include="objects\ParticleGenerator.h" />
+    <ClInclude Include="objects\GaussianParticleGenerator.h" />
+    <ClInclude Include="objects\UniformParticleGenerator.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Render">

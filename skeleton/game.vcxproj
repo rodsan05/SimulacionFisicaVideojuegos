@@ -254,20 +254,25 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="callbacks.cpp" />
+    <ClCompile Include="objects\GaussianParticleGenerator.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="objects\Particle.cpp" />
     <ClCompile Include="RenderUtils.cpp" />
     <ClCompile Include="Render\Camera.cpp" />
     <ClCompile Include="Render\Render.cpp" />
+    <ClCompile Include="objects\UniformParticleGenerator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="callbacks.hpp" />
     <ClInclude Include="core.hpp" />
+    <ClInclude Include="objects\GaussianParticleGenerator.h" />
     <ClInclude Include="objects\Particle.h" />
     <ClInclude Include="objects\Proyectile.h" />
+    <ClInclude Include="objects\ParticleGenerator.h" />
     <ClInclude Include="RenderUtils.hpp" />
     <ClInclude Include="Render\Camera.h" />
     <ClInclude Include="Render\Render.h" />
+    <ClInclude Include="objects\UniformParticleGenerator.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
