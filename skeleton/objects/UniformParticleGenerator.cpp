@@ -40,12 +40,17 @@ std::list<Particle*> UniformParticleGenerator::generateParticles()
 
 	for (int i = 0; i < _num_particles; i++)
 	{
-		Vector3 pos(posX(gen), posY(gen), posZ(gen));
-		Vector3 vel(velX(gen), velY(gen), velZ(gen));
+		int genProbRandom = rand() % 1;
 
-		Particle* p = new Particle(pos, vel, Vector3(0, -10.0f, 0), _dumping, _scale, _color, _lifeTime, _lifeDist, _m);
+		if (genProbRandom < _generation_probability)
+		{
+			Vector3 pos(posX(gen), posY(gen), posZ(gen));
+			Vector3 vel(velX(gen), velY(gen), velZ(gen));
 
-		particles.push_back(p);
+			Particle* p = new Particle(pos, vel, Vector3(0, -10.0f, 0), _dumping, _scale, _color, _lifeTime, _lifeDist, _m);
+
+			particles.push_back(p);
+		}
 	}
 
 	return particles;

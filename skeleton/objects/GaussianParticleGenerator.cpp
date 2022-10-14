@@ -39,14 +39,19 @@ std::list<Particle*> GaussianParticleGenerator::generateParticles()
 	std::normal_distribution<> velY(_mean_vel.y, std_dev_vel.y);
 	std::normal_distribution<> velZ(_mean_vel.z, std_dev_vel.z);
 
+	std::uniform_real_distribution<> genProbRandom(0, 1);
+
 	for (int i = 0; i < _num_particles; i++)
 	{
-		Vector3 pos(posX(gen), posY(gen), posZ(gen));
-		Vector3 vel(velX(gen), velY(gen), velZ(gen));
+		if (genProbRandom(gen) < _generation_probability)
+		{
+			Vector3 pos(posX(gen), posY(gen), posZ(gen));
+			Vector3 vel(velX(gen), velY(gen), velZ(gen));
 
-		Particle* p = new Particle(pos, vel, Vector3(0, -10.0f, 0), _dumping, _scale, _color, _lifeTime, _lifeDist, _m);
+			Particle* p = new Particle(pos, vel, Vector3(0, -10.0f, 0), _dumping, _scale, _color, _lifeTime, _lifeDist, _m);
 
-		particles.push_back(p);
+			particles.push_back(p);
+		}
 	}
 
 	return particles;

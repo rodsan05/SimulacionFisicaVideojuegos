@@ -10,6 +10,7 @@
 
 #include "objects/Particle.h"
 #include "objects/Proyectile.h"
+#include "objects/ParticleSystem.h"
 
 #include <iostream>
 
@@ -35,6 +36,7 @@ ContactReportCallback gContactReportCallback;
 ProyectileType proyectile;
 
 std::vector<Particle*> particles;
+ParticleSystem* ps;
 
 
 // Initialize physics engine
@@ -62,6 +64,8 @@ void initPhysics(bool interactive)
 	gScene = gPhysics->createScene(sceneDesc);
 
 	proyectile = ProyectileType::Bullet;
+
+	ps = new ParticleSystem(GAUSSIAN);
 }
 
 
@@ -88,6 +92,8 @@ void stepPhysics(bool interactive, double t)
 			particles.erase(particles.begin() + i);
 		}
 	}
+
+	ps->update(t);
 }
 
 // Function to clean data

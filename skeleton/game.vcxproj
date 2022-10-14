@@ -257,6 +257,7 @@
     <ClCompile Include="objects\GaussianParticleGenerator.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="objects\Particle.cpp" />
+    <ClCompile Include="objects\ParticleSystem.cpp" />
     <ClCompile Include="RenderUtils.cpp" />
     <ClCompile Include="Render\Camera.cpp" />
     <ClCompile Include="Render\Render.cpp" />
@@ -269,6 +270,7 @@
     <ClInclude Include="objects\Particle.h" />
     <ClInclude Include="objects\Proyectile.h" />
     <ClInclude Include="objects\ParticleGenerator.h" />
+    <ClInclude Include="objects\ParticleSystem.h" />
     <ClInclude Include="RenderUtils.hpp" />
     <ClInclude Include="Render\Camera.h" />
     <ClInclude Include="Render\Render.h" />
