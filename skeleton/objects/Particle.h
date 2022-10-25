@@ -2,6 +2,8 @@
 #include "../core.hpp"
 #include "../RenderUtils.hpp"
 
+#include <functional>
+
 using Color = Vector4;
 
 class Particle
@@ -16,6 +18,13 @@ public:
 
 	void integrate(double t);
 
+	virtual Particle* clone() const;
+
+	void setPos(Vector3 pos);
+	void setVel(Vector3 vel);
+
+	virtual void onDeath() {};
+
 protected:
 
 	void setParticle(Vector3 Pos, Vector3 Vel, Vector3 a_, float dumping_, float scale_, Color color, float lifeTime_, float lifeDist_, float m_ = 0);
@@ -29,6 +38,7 @@ protected:
 	Vector3 a;
 	float dumping;
 
+	float scale;
 	float m;
 	
 	bool alive = true;

@@ -1,11 +1,12 @@
 #include "Particle.h"
 
-Particle::Particle() : vel(), dumping(), a(), pose(), color(), renderItem(), lifeTime(), m()
+Particle::Particle() : vel(), dumping(), a(), pose(), color(), renderItem(), lifeTime(), m(), scale(), iniTime(), lifeDistance()
 {
 }
 
 Particle::Particle(Vector3 Pos, Vector3 Vel, Vector3 a_, float dumping_, float scale_, Color color_, float lifeTime_, float lifeDist_, float m_)
 {
+	scale = scale_;
 	vel = Vel;
 
 	dumping = dumping_;
@@ -75,8 +76,24 @@ void Particle::integrate(double t)
 	}
 }
 
+Particle* Particle::clone() const
+{
+	return new Particle(pose.p, vel, a, dumping, scale, color, lifeTime, lifeDistance, m);
+}
+
+void Particle::setPos(Vector3 pos_)
+{
+	pose.p = pos_;
+}
+
+void Particle::setVel(Vector3 vel_)
+{
+	vel = vel_;
+}
+
 void Particle::setParticle(Vector3 Pos, Vector3 Vel, Vector3 a_, float dumping_, float scale_, Color color_, float lifeTime_, float lifeDist_, float m_)
 {
+	scale = scale_;
 	vel = Vel;
 
 	dumping = dumping_;

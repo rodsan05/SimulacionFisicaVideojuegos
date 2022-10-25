@@ -11,7 +11,15 @@ public:
 
 	virtual std::list<Particle*> generateParticles() = 0;
 
-	void setParticle(Particle* model) {};
+	void setParticle(Particle* model) 
+	{
+		_model = model;
+	};
+
+	void setPos(Vector3 pos)
+	{
+		_mean_pos = pos;
+	}
 
 protected:
 	std::string _name;
@@ -19,7 +27,7 @@ protected:
 	int _num_particles;
 	double _generation_probability;
 
-	Particle* _model;
+	Particle* _model = nullptr;
 	Vector3 _mean_pos;
 	Vector3 _mean_vel;
 };

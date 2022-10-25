@@ -65,7 +65,9 @@ void initPhysics(bool interactive)
 
 	proyectile = ProyectileType::Bullet;
 
-	ps = new ParticleSystem(GAUSSIAN);
+	ps = new ParticleSystem(UNIFORM);
+
+	ps->generateFireworksSystem();
 }
 
 

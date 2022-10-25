@@ -48,7 +48,16 @@ std::list<Particle*> GaussianParticleGenerator::generateParticles()
 			Vector3 pos(posX(gen), posY(gen), posZ(gen));
 			Vector3 vel(velX(gen), velY(gen), velZ(gen));
 
-			Particle* p = new Particle(pos, vel, Vector3(0, -10.0f, 0), _dumping, _scale, _color, _lifeTime, _lifeDist, _m);
+			Particle* p; 
+			
+			if (_model == nullptr) p = new Particle(pos, vel, Vector3(0, -10.0f, 0), _dumping, _scale, _color, _lifeTime, _lifeDist, _m);
+
+			else
+			{
+				p = _model->clone();
+				p->setPos(pos);
+				p->setVel(vel);
+			}
 
 			particles.push_back(p);
 		}
