@@ -16,6 +16,8 @@
     <ClCompile Include="objects\ParticleSystem.cpp" />
     <ClCompile Include="objects\Firework.cpp" />
     <ClCompile Include="objects\CircleParticleGenerator.cpp" />
+    <ClCompile Include="objects\SphereParticleGenerator.cpp" />
+    <ClCompile Include="objects\StarParticleGenerator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core.hpp" />
@@ -35,6 +37,8 @@
     <ClInclude Include="objects\ParticleSystem.h" />
     <ClInclude Include="objects\Firework.h" />
     <ClInclude Include="objects\CircleParticleGenerator.h" />
+    <ClInclude Include="objects\SphereParticleGenerator.h" />
+    <ClInclude Include="objects\StarParticleGenerator.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Render">

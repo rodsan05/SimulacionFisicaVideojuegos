@@ -1,8 +1,6 @@
 #pragma once
 #include "GaussianParticleGenerator.h"
 
-const double PI = 3.14159265359;
-
 class CircleParticleGenerator : public ParticleGenerator
 {
 public:

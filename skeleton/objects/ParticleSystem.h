@@ -18,7 +18,7 @@ public:
 
 	ParticleGenerator* getParticleGenerator(std::string name);
 
-	void generateFireworksSystem();
+	void generateFireworksSystem(FireworkType ft);
 
 	void appendParticles(std::list<Particle*> particles);
 	void appendFireworks(std::list<Particle*> particles);

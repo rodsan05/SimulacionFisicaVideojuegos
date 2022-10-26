@@ -2,6 +2,8 @@
 #include "GaussianParticleGenerator.h"
 #include "UniformParticleGenerator.h"
 #include "CircleParticleGenerator.h"
+#include "SphereParticleGenerator.h"
+#include "StarParticleGenerator.h"
 
 ParticleSystem::ParticleSystem(ParticleGenType particleGen)
 {
@@ -72,18 +74,42 @@ ParticleGenerator* ParticleSystem::getParticleGenerator(std::string name)
     return nullptr;
 }
 
-void ParticleSystem::generateFireworksSystem()
+void ParticleSystem::generateFireworksSystem(FireworkType ft)
 {
-	Firework* f = new Firework(this, Vector3(0, 0, 0), Vector3(0, 10, 0), Vector3(0, 0, 0), 0.999f, 1, Color(0.5, 0.5, 0.5, 1), 1000, -1, 0);
+	Firework* f = new Firework(this, Vector3(0, 0, 0), Vector3(0, 30, 0), Vector3(0, 0, 0), 0.999f, 1, Color(0.85, 0.03, 0.16, 1), 1000, -1, 0);
+	Firework* f2 = new Firework(this, Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0), 0.999f, 0.8f, Color(0.9, 0.36, 0.03, 1), 500, -1, 0);
+	Firework* f3 = new Firework(this, Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0), 0.999f, 0.5f, Color(0.9, 0.57, 0.03, 1), 500, -1, 0);
 
-	CircleParticleGenerator* fireworkGen1 = new CircleParticleGenerator(6, Vector3(0), 10, Vector3(0));
-	
-	fireworkGen1->setParticle(f);
+	f2->deregisterRender();
+	f3->deregisterRender();
+
+	ParticleGenerator* fireworkGen1;
+	ParticleGenerator* fireworkGen2;
+
+	if (ft == Circle)
+	{
+		fireworkGen1 = new CircleParticleGenerator(6, Vector3(0), 10, Vector3(0));
+		fireworkGen2 = new CircleParticleGenerator(10, Vector3(0), 10, Vector3(0));
+	}
+	else if (ft == Sphere)
+	{
+		fireworkGen1 = new SphereParticleGenerator(100, Vector3(0), 10, Vector3(0));
+		fireworkGen2 = new SphereParticleGenerator(5, Vector3(0), 10, Vector3(0));
+	}
+	else if (ft == Star) 
+	{
+		fireworkGen1 = new StarParticleGenerator(60, Vector3(0), 10, Vector3(0), 6, 3, 1);
+		fireworkGen2 = new StarParticleGenerator(5, Vector3(0), 10, Vector3(0), 5, 3, 1);
+	}
+
+	fireworkGen1->setParticle(f2);
 	f->addParticleGen(fireworkGen1);
 
+	fireworkGen2->setParticle(f3);
+	f2->addParticleGen(fireworkGen2);
+		
 	_firework_pool.push_back(f);
 }
-
 void ParticleSystem::appendParticles(std::list<Particle*> particles)
 {
 	_particles.insert(_particles.end(), particles.begin(), particles.end());

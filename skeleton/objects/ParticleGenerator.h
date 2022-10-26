@@ -1,7 +1,13 @@
 #pragma once
 #include <string>
 #include <list>
+#include <random>
 #include "Particle.h"
+
+enum FireworkType 
+{
+	Circle, Sphere, Star
+};
 
 class ParticleGenerator
 {
@@ -22,6 +28,9 @@ public:
 	}
 
 protected:
+
+	double PI = std::_Pi;
+
 	std::string _name;
 
 	int _num_particles;

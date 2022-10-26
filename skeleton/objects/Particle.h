@@ -23,7 +23,15 @@ public:
 	void setPos(Vector3 pos);
 	void setVel(Vector3 vel);
 
+	void setLifeTime(float time);
+	void setLifeDist(float dist);
+	void setColor(Color c);
+	void setScale(float s);
+	void setMass(float m);
+
 	virtual void onDeath() {};
+
+	void deregisterRender();
 
 protected:
 

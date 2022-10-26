@@ -27,8 +27,8 @@ std::list<Particle*> CircleParticleGenerator::generateParticles()
 		Particle* p;
 
 		p = _model->clone();
-		p->setPos(pos);
-		p->setVel(Vector3(0));
+		p->setPos(_mean_pos);
+		p->setVel(vel * 20);
 
 		particles.push_back(p);
 	}

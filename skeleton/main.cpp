@@ -66,8 +66,6 @@ void initPhysics(bool interactive)
 	proyectile = ProyectileType::Bullet;
 
 	ps = new ParticleSystem(UNIFORM);
-
-	ps->generateFireworksSystem();
 }
 
 
@@ -142,6 +140,14 @@ void keyPress(unsigned char key, const PxTransform& camera)
 			break;
 		case '4':
 			proyectile = Misile;
+			break;
+		case 'C':
+			ps->generateFireworksSystem(Circle);
+			break;
+		case 'E':
+			ps->generateFireworksSystem(Sphere);
+		case 'X':
+			ps->generateFireworksSystem(Star);
 			break;
 	case ' ':
 	{

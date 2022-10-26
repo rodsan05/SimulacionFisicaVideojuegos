@@ -13,7 +13,12 @@ Firework::~Firework()
 
 Particle* Firework::clone() const
 {
-	return new Firework(_pSys, pose.p, vel, a, dumping, scale, color, lifeTime, lifeDistance, m);
+	Firework* f = new Firework(_pSys, pose.p, vel, a, dumping, scale, color, lifeTime, lifeDistance, m);
+	
+	for (auto g : _gens)
+		f->addParticleGen(g.get());
+
+	return f;
 }
 
 void Firework::onDeath()

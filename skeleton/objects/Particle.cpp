@@ -91,6 +91,36 @@ void Particle::setVel(Vector3 vel_)
 	vel = vel_;
 }
 
+void Particle::setLifeTime(float time)
+{
+	lifeTime = time;
+}
+
+void Particle::setLifeDist(float dist)
+{
+	lifeDistance = dist;
+}
+
+void Particle::setColor(Color c)
+{
+	color = c;
+}
+
+void Particle::setScale(float s)
+{
+	scale = s;
+}
+
+void Particle::setMass(float mass)
+{
+	m = mass;
+}
+
+void Particle::deregisterRender()
+{
+	DeregisterRenderItem(renderItem);
+}
+
 void Particle::setParticle(Vector3 Pos, Vector3 Vel, Vector3 a_, float dumping_, float scale_, Color color_, float lifeTime_, float lifeDist_, float m_)
 {
 	scale = scale_;
