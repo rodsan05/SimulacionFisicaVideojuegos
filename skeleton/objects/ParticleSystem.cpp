@@ -5,29 +5,66 @@
 #include "SphereParticleGenerator.h"
 #include "StarParticleGenerator.h"
 
-ParticleSystem::ParticleSystem(ParticleGenType particleGen)
+ParticleSystem::ParticleSystem()
 {
-	switch (particleGen)
-	{
-	case GAUSSIAN:
-		_particle_generators.push_back(new GaussianParticleGenerator({ 0, 50, 0 }, { 0, 0,0 }, { 3, 8, 8 }, { 10, 10, 10 }, 0.8, 20, { 0, 0, 0, 1}, 1, -1, 10));
-		break;
-	case UNIFORM:
-		break;
-	default:
-		break;
-	}
 }
 
 ParticleSystem::~ParticleSystem()
 {
 }
 
+void ParticleSystem::createParticleGenerator(ParticleGenType type)
+{
+	ParticleGenerator* generator;
+	Particle* p;
+
+	switch (type)
+	{
+	case Hormigas:
+		p = new Particle(Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, -10, 0), 0.999f, 1, Color(0, 0, 0, 1), -1, 20);
+		p->deregisterRender();
+		generator = new GaussianParticleGenerator({ 0, 15, 0 }, { 0, 0, 0 }, { 3, 8, 8 }, { 10, 10, 10 }, 0.8, 20);
+		generator->setParticle(p);
+		generator->setPerpetual(true);
+		generator->setPerpetual(true);
+		break;
+	case Cubo:
+		p = new Particle(Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, -10, 0), 0.999f, 1, Color(0.2, 0.2, 0.9, 1), -1, 50);
+		p->deregisterRender();
+		generator = new UniformParticleGenerator({ -15, 30, 0 }, { 0, 0,0 }, { 30, 30, 30 }, { 1, 1, 1 }, 0.8, 20);
+		generator->setParticle(p);
+		generator->setPerpetual(true);
+		break;
+	case Sangre:
+		p = new Particle(Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, -5, 0), 0.999f, 0.5, Color(0.7, 0, 0, 1), 2000, 30);
+		p->deregisterRender();
+		generator = new GaussianParticleGenerator({ 0, 15, 0 }, { 0, 0, 0 }, { 0.001f, 0.001f, 0.001f }, { 20, 20, 20 }, 1, 30);
+		generator->setParticle(p);
+		break;
+	case Humo:
+		p = new Particle(Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 5, 0), 0.999f, 0.5, Color(0.6, 0.5, 0.4, 1), -1, 100);
+		p->deregisterRender();
+		generator = new GaussianParticleGenerator({ 0, 0, 0 }, { 0, 0, 0 }, { 2.5, 5, 0.001f }, { 0.001f, 0.001f, 0.001f }, 1, 5);
+		generator->setParticle(p);
+		generator->setPerpetual(true);
+		break;
+	default:
+		break;
+	}
+
+	_particle_generators.push_back(generator);
+}
+
 void ParticleSystem::update(double t)
 {
-	for (auto g : _particle_generators) 
+	for (auto g : _particle_generators)
 	{
-		auto list = g->generateParticles();	
+		if (g->isPerpetual())
+		{
+			auto list = g->generateParticles();
+
+			appendParticles(list);
+		}
 	}
 
 	auto iterador = _particles.begin();
@@ -66,6 +103,16 @@ void ParticleSystem::update(double t)
 			delete p;
 			iteradorF = _firework_pool.erase(iteradorF);
 		}
+	}
+}
+
+void ParticleSystem::generate()
+{
+	for (auto g : _particle_generators)
+	{
+		auto list = g->generateParticles();
+
+		appendParticles(list);
 	}
 }
 
@@ -118,4 +165,17 @@ void ParticleSystem::appendParticles(std::list<Particle*> particles)
 void ParticleSystem::appendFireworks(std::list<Particle*> particles)
 {
 	_firework_pool.insert(_firework_pool.end(), particles.begin(), particles.end());
+}
+
+void ParticleSystem::clearAllGenerators()
+{
+	auto it = _particle_generators.begin();
+
+	while (it != _particle_generators.end()) 
+	{
+		delete *it;
+		it = _particle_generators.erase(it);
+	}
+
+	_particle_generators.clear();
 }

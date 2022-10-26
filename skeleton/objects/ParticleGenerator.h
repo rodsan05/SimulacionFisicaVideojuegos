@@ -13,6 +13,7 @@ class ParticleGenerator
 {
 public:
 	ParticleGenerator() {};
+	ParticleGenerator(bool perpetual) : _perpetual(perpetual) {};
 	~ParticleGenerator() {};
 
 	virtual std::list<Particle*> generateParticles() = 0;
@@ -27,6 +28,16 @@ public:
 		_mean_pos = pos;
 	}
 
+	void setPerpetual(bool set) 
+	{
+		_perpetual = set;
+	}
+
+	bool isPerpetual() 
+	{
+		return _perpetual;
+	}
+
 protected:
 
 	double PI = std::_Pi;
@@ -39,5 +50,7 @@ protected:
 	Particle* _model = nullptr;
 	Vector3 _mean_pos;
 	Vector3 _mean_vel;
+
+	bool _perpetual = false;
 };
 

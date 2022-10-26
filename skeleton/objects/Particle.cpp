@@ -84,6 +84,7 @@ Particle* Particle::clone() const
 void Particle::setPos(Vector3 pos_)
 {
 	pose.p = pos_;
+	initPos = pos_;
 }
 
 void Particle::setVel(Vector3 vel_)

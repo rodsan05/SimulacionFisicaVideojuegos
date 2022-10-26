@@ -65,7 +65,7 @@ void initPhysics(bool interactive)
 
 	proyectile = ProyectileType::Bullet;
 
-	ps = new ParticleSystem(UNIFORM);
+	ps = new ParticleSystem();
 }
 
 
@@ -126,28 +126,39 @@ void keyPress(unsigned char key, const PxTransform& camera)
 
 	switch (toupper(key))
 	{
+		case 'Q':
+			ps->clearAllGenerators();
+			break;
 		case 'B': 
 			particles.push_back(new Proyectile(proyectile, cam->getTransform().p + cam->getDir()*5, cam->getDir()));
 			break;
 		case '1':
-			proyectile = Bullet;
+			//proyectile = Bullet;
+			ps->createParticleGenerator(Hormigas);
 			break;
 		case '2':
-			proyectile = CannonBall;
+			//proyectile = CannonBall;
+			ps->createParticleGenerator(Cubo);
 			break;
 		case '3':
-			proyectile = Laser;
+			//proyectile = Laser;
+			ps->createParticleGenerator(Sangre);
 			break;
 		case '4':
-			proyectile = Misile;
+			//proyectile = Misile;
+			ps->createParticleGenerator(Humo);
 			break;
 		case 'C':
 			ps->generateFireworksSystem(Circle);
 			break;
 		case 'E':
 			ps->generateFireworksSystem(Sphere);
+			break;
 		case 'X':
 			ps->generateFireworksSystem(Star);
+			break;
+		case 'G':
+			ps->generate();
 			break;
 	case ' ':
 	{

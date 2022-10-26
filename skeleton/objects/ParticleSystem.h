@@ -3,18 +3,21 @@
 #include "Firework.h"
 #include <string>
 
-enum ParticleGenType 
+enum ParticleGenType
 {
-	GAUSSIAN, UNIFORM
+	Hormigas, Cubo, Sangre, Humo
 };
 
 class ParticleSystem
 {
 public:
-	ParticleSystem(ParticleGenType particleGen);
+	ParticleSystem();
 	~ParticleSystem();
 
+	void createParticleGenerator(ParticleGenType type);
+
 	void update(double t);
+	void generate();
 
 	ParticleGenerator* getParticleGenerator(std::string name);
 
@@ -22,6 +25,8 @@ public:
 
 	void appendParticles(std::list<Particle*> particles);
 	void appendFireworks(std::list<Particle*> particles);
+
+	void clearAllGenerators();
 
 protected:
 	std::list<Particle*> _particles;
