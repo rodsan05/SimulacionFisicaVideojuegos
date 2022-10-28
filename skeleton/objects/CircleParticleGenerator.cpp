@@ -21,14 +21,15 @@ std::list<Particle*> CircleParticleGenerator::generateParticles()
 	{
 		angle = 360 / _num_particles * i;
 
-		Vector3 pos(cos(angle * (PI / 180)) * _radius, sin(angle * (PI / 180)) * _radius, 0);
+		//Vector3 pos(cos(angle * (PI / 180)) * _radius, sin(angle * (PI / 180)) * _radius, 0);
+
 		Vector3 vel = Vector3(cos(angle * (PI / 180)), sin(angle * (PI / 180)), 0);
 
 		Particle* p;
 
 		p = _model->clone();
 		p->setPos(_mean_pos);
-		p->setVel(vel * 20);
+		p->setVel(vel.getNormalized() * 20);
 
 		particles.push_back(p);
 	}
