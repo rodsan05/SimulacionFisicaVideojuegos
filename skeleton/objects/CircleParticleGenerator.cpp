@@ -19,7 +19,7 @@ std::list<Particle*> CircleParticleGenerator::generateParticles()
 	float angle = 0;
 	for (int i = 0; i < _num_particles; i++)
 	{
-		angle = 360 / _num_particles * i;
+		angle = 360.0 / (float)_num_particles * i;
 
 		//Vector3 pos(cos(angle * (PI / 180)) * _radius, sin(angle * (PI / 180)) * _radius, 0);
 
