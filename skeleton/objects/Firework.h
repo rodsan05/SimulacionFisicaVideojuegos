@@ -8,7 +8,7 @@ class ParticleGenerator;
 class Firework : public Particle
 {
 public:
-	Firework(ParticleSystem* pSys, Vector3 Pos, Vector3 Vel, Vector3 a_, float dumping_, float scale_, Color color_, float lifeTime_, float lifeDist_, float m_);
+	Firework(ParticleSystem* pSys, Vector3 Pos, Vector3 Vel, Vector3 a_, float damping_, float scale_, Color color_, float lifeTime_, float lifeDist_, float m_);
 	~Firework();
 
 	Particle* clone() const override;

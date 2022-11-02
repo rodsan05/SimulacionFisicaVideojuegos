@@ -39,6 +39,8 @@
     <ClInclude Include="objects\CircleParticleGenerator.h" />
     <ClInclude Include="objects\SphereParticleGenerator.h" />
     <ClInclude Include="objects\StarParticleGenerator.h" />
+    <ClInclude Include="objects\ForceGenerator.h" />
+    <ClInclude Include="objects\ForceRegistry.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Render">

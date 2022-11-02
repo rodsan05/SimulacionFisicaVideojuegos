@@ -1,15 +1,15 @@
 #include "Particle.h"
 
-Particle::Particle() : vel(), dumping(), a(), pose(), color(), renderItem(), lifeTime(), m(), scale(), iniTime(), lifeDistance()
+Particle::Particle() : vel(), damping(), a(), pose(), color(), renderItem(), lifeTime(), m(), scale(), iniTime(), lifeDistance()
 {
 }
 
-Particle::Particle(Vector3 Pos, Vector3 Vel, Vector3 a_, float dumping_, float scale_, Color color_, float lifeTime_, float lifeDist_, float m_)
+Particle::Particle(Vector3 Pos, Vector3 Vel, Vector3 a_, float damping_, float scale_, Color color_, float lifeTime_, float lifeDist_, float m_)
 {
 	scale = scale_;
 	vel = Vel;
 
-	dumping = dumping_;
+	damping = damping_;
 	a = a_;
 
 	pose = physx::PxTransform(Pos);
@@ -45,11 +45,26 @@ void Particle::setAlive(bool set)
 
 void Particle::integrate(double t)
 {
-	// p(i+1) = p(i) + v * t
-	pose.p = pose.p + vel * t;
+	float inverse_mass = 1.0 / m;
 
-	// vf = v0*d^t + a*t
-	vel = vel * pow(dumping, t) + a * t;
+	if (inverse_mass <= 0.0f) return;
+
+	pose.p += vel * t;
+
+	Vector3 totalAccel = a;
+	totalAccel += force * inverse_mass;
+
+	//update linear vel
+	vel += totalAccel * t;
+	//damping
+	vel *= pow(damping, t);
+
+	//anteriores practicas
+	//// p(i+1) = p(i) + v * t
+	//pose.p = pose.p + vel * t;
+
+	//// vf = v0*d^t + a*t
+	//vel = vel * pow(damping, t) + a * t;
 
 	//comprueba si debe morir por tiempo
 	if (lifeTime != -1) 
@@ -78,7 +93,7 @@ void Particle::integrate(double t)
 
 Particle* Particle::clone() const
 {
-	return new Particle(pose.p, vel, a, dumping, scale, color, lifeTime, lifeDistance, m);
+	return new Particle(pose.p, vel, a, damping, scale, color, lifeTime, lifeDistance, m);
 }
 
 void Particle::setPos(Vector3 pos_)
@@ -122,12 +137,22 @@ void Particle::deregisterRender()
 	DeregisterRenderItem(renderItem);
 }
 
-void Particle::setParticle(Vector3 Pos, Vector3 Vel, Vector3 a_, float dumping_, float scale_, Color color_, float lifeTime_, float lifeDist_, float m_)
+void Particle::clearForce()
+{
+	force *= 0;
+}
+
+void Particle::addForce(const Vector3& f)
+{
+	force += f;
+}
+
+void Particle::setParticle(Vector3 Pos, Vector3 Vel, Vector3 a_, float damping_, float scale_, Color color_, float lifeTime_, float lifeDist_, float m_)
 {
 	scale = scale_;
 	vel = Vel;
 
-	dumping = dumping_;
+	damping = damping_;
 	a = a_;
 
 	pose = physx::PxTransform(Pos);

@@ -1,8 +1,8 @@
 #include "Firework.h"
 #include "ParticleSystem.h"
 
-Firework::Firework(ParticleSystem* pSys, Vector3 Pos, Vector3 Vel, Vector3 a_, float dumping_, float scale_, Color color_, float lifeTime_, float lifeDist_, float m_) :
-	Particle(Pos, Vel, a_, dumping_, scale_, color_, lifeTime_, lifeDist_, m)
+Firework::Firework(ParticleSystem* pSys, Vector3 Pos, Vector3 Vel, Vector3 a_, float damping_, float scale_, Color color_, float lifeTime_, float lifeDist_, float m_) :
+	Particle(Pos, Vel, a_, damping_, scale_, color_, lifeTime_, lifeDist_, m)
 {
 	_pSys = pSys;
 }
@@ -13,7 +13,7 @@ Firework::~Firework()
 
 Particle* Firework::clone() const
 {
-	Firework* f = new Firework(_pSys, pose.p, vel, a, dumping, scale, color, lifeTime, lifeDistance, m);
+	Firework* f = new Firework(_pSys, pose.p, vel, a, damping, scale, color, lifeTime, lifeDistance, m);
 	
 	for (auto g : _gens)
 		f->addParticleGen(g.get());

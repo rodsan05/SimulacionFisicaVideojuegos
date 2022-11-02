@@ -269,6 +269,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="callbacks.hpp" />
+    <ClInclude Include="objects\ForceGenerator.h" />
+    <ClInclude Include="objects\ForceRegistry.hpp" />
     <ClInclude Include="objects\SphereParticleGenerator.h" />
     <ClInclude Include="core.hpp" />
     <ClInclude Include="objects\CircleParticleGenerator.h" />

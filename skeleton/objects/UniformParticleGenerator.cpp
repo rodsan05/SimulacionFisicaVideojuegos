@@ -1,6 +1,6 @@
 #include "UniformParticleGenerator.h"
 
-UniformParticleGenerator::UniformParticleGenerator(Vector3 pos, Vector3 vel, Vector3 pos_w, Vector3 vel_w, double gen_prob, int num, Color color, float scale, float lifeTime, float lifeDist, float dumping, float m)
+UniformParticleGenerator::UniformParticleGenerator(Vector3 pos, Vector3 vel, Vector3 pos_w, Vector3 vel_w, double gen_prob, int num, Color color, float scale, float lifeTime, float lifeDist, float damping, float m)
 {
 	_mean_pos = pos;
 	_mean_vel = vel;
@@ -14,7 +14,7 @@ UniformParticleGenerator::UniformParticleGenerator(Vector3 pos, Vector3 vel, Vec
 	_m = m;
 	_lifeDist = lifeDist;
 	_lifeTime = lifeTime;
-	_dumping = dumping;
+	_damping = damping;
 
 	_color = color;
 }
@@ -49,7 +49,7 @@ std::list<Particle*> UniformParticleGenerator::generateParticles()
 
 			Particle* p;
 
-			if (_model == nullptr) p = new Particle(pos + _mean_pos, vel + _mean_vel, Vector3(0, -10.0f, 0), _dumping, _scale, _color, _lifeTime, _lifeDist, _m);
+			if (_model == nullptr) p = new Particle(pos + _mean_pos, vel + _mean_vel, Vector3(0, -10.0f, 0), _damping, _scale, _color, _lifeTime, _lifeDist, _m);
 
 			else
 			{
