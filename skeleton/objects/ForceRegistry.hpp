@@ -3,22 +3,22 @@
 #include <map>
 #include "ForceGenerator.h"
 
-using FRPair = std::pair<Particle*, ForceGenerator*>;
+using FRPair = std::pair<ForceGenerator*, Particle*>;
 
-class ForceRegistry : public std::multimap<Particle*, ForceGenerator*>
+class ForceRegistry : public std::multimap<ForceGenerator*, Particle*>
 {
 public:
 	void updateForces(double duration)
 	{
 		for (auto it = begin(); it != end(); it++)
 		{
-			it->second->updateForce(it->first, duration);
+			it->first->updateForce(it->second, duration);
 		}
 	}
 
 	void addRegistry(ForceGenerator* fg, Particle* p) 
 	{
-		this->insert(FRPair(p, fg));
+		this->insert(FRPair(fg, p));
 	}
 
 	//posiblemente ineficiente
