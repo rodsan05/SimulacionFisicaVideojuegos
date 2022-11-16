@@ -1,7 +1,10 @@
 #pragma once
 #include "ParticleGenerator.h"
+#include "ForceRegistry.hpp"
 #include "Firework.h"
+#include "GravityForceGenerator.h"
 #include <string>
+#include "WindForceGenerator.h"
 
 enum ParticleGenType
 {
@@ -34,5 +37,9 @@ protected:
 
 	std::list<ParticleGenerator*> _particle_generators;
 	ParticleGenerator* _firework_gen;
+
+	ForceRegistry* _force_registry;
+	GravityForceGenerator* _gravity_gen;
+	WindForceGenerator* _wind_gen;
 };
 

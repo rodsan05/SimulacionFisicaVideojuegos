@@ -7,6 +7,10 @@
 
 ParticleSystem::ParticleSystem()
 {
+	_force_registry = new ForceRegistry();
+
+	_gravity_gen = new GravityForceGenerator(Vector3(0, -10, 0));
+	_wind_gen = new WindForceGenerator(Vector3(-10, 0, 0), 1, 0);
 }
 
 ParticleSystem::~ParticleSystem()
@@ -29,7 +33,7 @@ void ParticleSystem::createParticleGenerator(ParticleGenType type)
 		generator->setPerpetual(true);
 		break;
 	case Cubo:
-		p = new Particle(Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, -10, 0), 0.999f, 1, Color(0.2, 0.2, 0.9, 1), -1, 50);
+		p = new Particle(Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0), 0.999f, 1, Color(0.2, 0.2, 0.9, 1), -1, 50, 1);
 		p->deregisterRender();
 		generator = new UniformParticleGenerator({ -15, 30, 0 }, { 0, 0,0 }, { 30, 30, 30 }, { 1, 1, 1 }, 0.8, 20);
 		generator->setParticle(p);
@@ -57,15 +61,9 @@ void ParticleSystem::createParticleGenerator(ParticleGenType type)
 
 void ParticleSystem::update(double t)
 {
-	for (auto g : _particle_generators)
-	{
-		if (g->isPerpetual())
-		{
-			auto list = g->generateParticles();
+	generate();
 
-			appendParticles(list);
-		}
-	}
+	_force_registry->updateForces(t);
 
 	auto iterador = _particles.begin();
 
@@ -80,6 +78,8 @@ void ParticleSystem::update(double t)
 		}
 		else
 		{
+			_force_registry->deleteParticleRegistry(p);
+
 			p->onDeath();
 			delete p;
 			iterador = _particles.erase(iterador);
@@ -111,6 +111,12 @@ void ParticleSystem::generate()
 	for (auto g : _particle_generators)
 	{
 		auto list = g->generateParticles();
+
+		for (auto p : list)
+		{
+			_force_registry->addRegistry(_gravity_gen, p);
+			_force_registry->addRegistry(_wind_gen, p);
+		}
 
 		appendParticles(list);
 	}

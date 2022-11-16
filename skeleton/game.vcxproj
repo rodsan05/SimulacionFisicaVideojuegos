@@ -254,6 +254,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="callbacks.cpp" />
+    <ClCompile Include="objects\DragForceGenerator.cpp" />
+    <ClCompile Include="objects\GravityForceGenerator.cpp" />
     <ClCompile Include="objects\SphereParticleGenerator.cpp" />
     <ClCompile Include="objects\CircleParticleGenerator.cpp" />
     <ClCompile Include="objects\Firework.cpp" />
@@ -266,9 +268,12 @@
     <ClCompile Include="Render\Render.cpp" />
     <ClCompile Include="objects\UniformParticleGenerator.cpp" />
     <ClCompile Include="objects\StarParticleGenerator.cpp" />
+    <ClCompile Include="objects\WindForceGenerator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="callbacks.hpp" />
+    <ClInclude Include="objects\DragForceGenerator.h" />
+    <ClInclude Include="objects\GravityForceGenerator.h" />
     <ClInclude Include="objects\ForceGenerator.h" />
     <ClInclude Include="objects\ForceRegistry.hpp" />
     <ClInclude Include="objects\SphereParticleGenerator.h" />
@@ -285,6 +290,7 @@
     <ClInclude Include="Render\Render.h" />
     <ClInclude Include="objects\UniformParticleGenerator.h" />
     <ClInclude Include="objects\StarParticleGenerator.h" />
+    <ClInclude Include="objects\WindForceGenerator.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

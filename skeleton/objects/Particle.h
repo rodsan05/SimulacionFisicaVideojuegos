@@ -36,6 +36,9 @@ public:
 	void clearForce();
 	void addForce(const Vector3& f);
 
+	float getMass() { return m; };
+	Vector3 getVel() { return vel; };
+
 protected:
 
 	void setParticle(Vector3 Pos, Vector3 Vel, Vector3 a_, float damping_, float scale_, Color color, float lifeTime_, float lifeDist_, float m_ = 0);

@@ -6,6 +6,8 @@ Particle::Particle() : vel(), damping(), a(), pose(), color(), renderItem(), lif
 
 Particle::Particle(Vector3 Pos, Vector3 Vel, Vector3 a_, float damping_, float scale_, Color color_, float lifeTime_, float lifeDist_, float m_)
 {
+	force = Vector3(0);
+
 	scale = scale_;
 	vel = Vel;
 
@@ -57,7 +59,9 @@ void Particle::integrate(double t)
 	//update linear vel
 	vel += totalAccel * t;
 	//damping
-	vel *= pow(damping, t);
+	vel *= powf(damping, t);
+
+	clearForce();
 
 	//anteriores practicas
 	//// p(i+1) = p(i) + v * t
@@ -149,6 +153,8 @@ void Particle::addForce(const Vector3& f)
 
 void Particle::setParticle(Vector3 Pos, Vector3 Vel, Vector3 a_, float damping_, float scale_, Color color_, float lifeTime_, float lifeDist_, float m_)
 {
+	force = Vector3(0);
+
 	scale = scale_;
 	vel = Vel;
 

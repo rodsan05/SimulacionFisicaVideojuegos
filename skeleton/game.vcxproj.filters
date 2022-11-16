@@ -18,6 +18,9 @@
     <ClCompile Include="objects\CircleParticleGenerator.cpp" />
     <ClCompile Include="objects\SphereParticleGenerator.cpp" />
     <ClCompile Include="objects\StarParticleGenerator.cpp" />
+    <ClCompile Include="objects\GravityForceGenerator.cpp" />
+    <ClCompile Include="objects\DragForceGenerator.cpp" />
+    <ClCompile Include="objects\WindForceGenerator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core.hpp" />
@@ -41,6 +44,9 @@
     <ClInclude Include="objects\StarParticleGenerator.h" />
     <ClInclude Include="objects\ForceGenerator.h" />
     <ClInclude Include="objects\ForceRegistry.hpp" />
+    <ClInclude Include="objects\GravityForceGenerator.h" />
+    <ClInclude Include="objects\DragForceGenerator.h" />
+    <ClInclude Include="objects\WindForceGenerator.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Render">
