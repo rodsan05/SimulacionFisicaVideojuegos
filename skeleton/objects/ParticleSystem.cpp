@@ -5,12 +5,9 @@
 #include "SphereParticleGenerator.h"
 #include "StarParticleGenerator.h"
 
-ParticleSystem::ParticleSystem()
+ParticleSystem::ParticleSystem() : _gravity_gen(nullptr), _wind_gen(nullptr), _whirlwind_gen(nullptr), _firework_gen(nullptr)
 {
 	_force_registry = new ForceRegistry();
-
-	_gravity_gen = new GravityForceGenerator(Vector3(0, -10, 0));
-	_wind_gen = new WindForceGenerator(Vector3(-10, 0, 0), 1, 0);
 }
 
 ParticleSystem::~ParticleSystem()
@@ -29,7 +26,6 @@ void ParticleSystem::createParticleGenerator(ParticleGenType type)
 		p->deregisterRender();
 		generator = new GaussianParticleGenerator({ 0, 15, 0 }, { 0, 0, 0 }, { 3, 8, 8 }, { 10, 10, 10 }, 0.8, 20);
 		generator->setParticle(p);
-		generator->setPerpetual(true);
 		generator->setPerpetual(true);
 		break;
 	case Cubo:
@@ -67,7 +63,7 @@ void ParticleSystem::update(double t)
 
 	auto iterador = _particles.begin();
 
-	while (iterador != _particles.end()) 
+	while (iterador != _particles.end())
 	{
 		auto p = *iterador;
 
@@ -110,21 +106,31 @@ void ParticleSystem::generate()
 {
 	for (auto g : _particle_generators)
 	{
-		auto list = g->generateParticles();
-
-		for (auto p : list)
+		if (g->isPerpetual())
 		{
-			_force_registry->addRegistry(_gravity_gen, p);
-			_force_registry->addRegistry(_wind_gen, p);
-		}
+			auto list = g->generateParticles();
 
-		appendParticles(list);
+			for (auto p : list)
+			{
+				if (_gravity_gen != nullptr)
+					_force_registry->addRegistry(_gravity_gen, p);
+
+				if (_wind_gen != nullptr)
+					_force_registry->addRegistry(_wind_gen, p);
+
+				if (_whirlwind_gen != nullptr)
+					_force_registry->addRegistry(_whirlwind_gen, p);
+			}
+
+			appendParticles(list);
+
+		}
 	}
 }
 
 ParticleGenerator* ParticleSystem::getParticleGenerator(std::string name)
 {
-    return nullptr;
+	return nullptr;
 }
 
 void ParticleSystem::generateFireworksSystem(FireworkType ft)
@@ -149,7 +155,7 @@ void ParticleSystem::generateFireworksSystem(FireworkType ft)
 		fireworkGen1 = new SphereParticleGenerator(100, Vector3(0), 10, Vector3(0));
 		fireworkGen2 = new SphereParticleGenerator(5, Vector3(0), 10, Vector3(0));
 	}
-	else if (ft == Star) 
+	else if (ft == Star)
 	{
 		fireworkGen1 = new StarParticleGenerator(60, Vector3(0), 10, Vector3(0), 6, 3, 1);
 		fireworkGen2 = new StarParticleGenerator(5, Vector3(0), 10, Vector3(0), 5, 3, 1);
@@ -160,7 +166,7 @@ void ParticleSystem::generateFireworksSystem(FireworkType ft)
 
 	fireworkGen2->setParticle(f3);
 	f2->addParticleGen(fireworkGen2);
-		
+
 	_firework_pool.push_back(f);
 }
 void ParticleSystem::appendParticles(std::list<Particle*> particles)
@@ -177,11 +183,28 @@ void ParticleSystem::clearAllGenerators()
 {
 	auto it = _particle_generators.begin();
 
-	while (it != _particle_generators.end()) 
+	while (it != _particle_generators.end())
 	{
-		delete *it;
+		delete* it;
 		it = _particle_generators.erase(it);
 	}
 
 	_particle_generators.clear();
+}
+
+void ParticleSystem::generateGravity()
+{
+}
+
+void ParticleSystem::generateWind()
+{
+}
+
+void ParticleSystem::generateWhirlwind()
+{
+}
+
+void ParticleSystem::clearForces()
+{
+	
 }

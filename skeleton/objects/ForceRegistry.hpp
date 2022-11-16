@@ -21,6 +21,7 @@ public:
 		this->insert(FRPair(p, fg));
 	}
 
+	//erase optimizado
 	void deleteParticleRegistry(Particle* p) 
 	{
 		this->erase(p);

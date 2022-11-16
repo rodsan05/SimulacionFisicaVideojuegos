@@ -38,6 +38,7 @@ public:
 
 	float getMass() { return m; };
 	Vector3 getVel() { return vel; };
+	Vector3 getPos() { return pose.p; };
 
 protected:
 

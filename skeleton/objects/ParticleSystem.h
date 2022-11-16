@@ -3,8 +3,10 @@
 #include "ForceRegistry.hpp"
 #include "Firework.h"
 #include "GravityForceGenerator.h"
-#include <string>
 #include "WindForceGenerator.h"
+#include "WhirlwindForceGenerator.h"
+
+#include <string>
 
 enum ParticleGenType
 {
@@ -29,7 +31,12 @@ public:
 	void appendParticles(std::list<Particle*> particles);
 	void appendFireworks(std::list<Particle*> particles);
 
+	void generateGravity();
+	void generateWind();
+	void generateWhirlwind();
+
 	void clearAllGenerators();
+	void clearForces();
 
 protected:
 	std::list<Particle*> _particles;
@@ -38,8 +45,10 @@ protected:
 	std::list<ParticleGenerator*> _particle_generators;
 	ParticleGenerator* _firework_gen;
 
+	std::list<ForceGenerator*> _force_generators;
 	ForceRegistry* _force_registry;
 	GravityForceGenerator* _gravity_gen;
 	WindForceGenerator* _wind_gen;
+	WhirlwindForceGenerator* _whirlwind_gen;
 };
 
