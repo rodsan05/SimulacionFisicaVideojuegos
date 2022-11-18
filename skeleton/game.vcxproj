@@ -254,6 +254,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="callbacks.cpp" />
+    <ClCompile Include="objects\ExplosionForceGenerator.cpp" />
     <ClCompile Include="objects\DragForceGenerator.cpp" />
     <ClCompile Include="objects\GravityForceGenerator.cpp" />
     <ClCompile Include="objects\SphereParticleGenerator.cpp" />
@@ -273,6 +274,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="callbacks.hpp" />
+    <ClInclude Include="objects\ExplosionForceGenerator.h" />
     <ClInclude Include="objects\DragForceGenerator.h" />
     <ClInclude Include="objects\GravityForceGenerator.h" />
     <ClInclude Include="objects\ForceGenerator.h" />

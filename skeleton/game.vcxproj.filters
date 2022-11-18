@@ -22,6 +22,8 @@
     <ClCompile Include="objects\DragForceGenerator.cpp" />
     <ClCompile Include="objects\WindForceGenerator.cpp" />
     <ClCompile Include="objects\WhirlwindForceGenerator.cpp" />
+    <ClCompile Include="objects\ExplosionForceGenerator.cpp" />
+    <ClCompile Include="objects\RandomParticleGenerator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core.hpp" />
@@ -49,6 +51,8 @@
     <ClInclude Include="objects\DragForceGenerator.h" />
     <ClInclude Include="objects\WindForceGenerator.h" />
     <ClInclude Include="objects\WhirlwindForceGenerator.h" />
+    <ClInclude Include="objects\ExplosionForceGenerator.h" />
+    <ClInclude Include="objects\RandomParticleGenerator.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Render">

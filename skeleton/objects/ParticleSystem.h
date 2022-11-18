@@ -5,12 +5,13 @@
 #include "GravityForceGenerator.h"
 #include "WindForceGenerator.h"
 #include "WhirlwindForceGenerator.h"
+#include "ExplosionForceGenerator.h"
 
 #include <string>
 
 enum ParticleGenType
 {
-	Hormigas, Cubo, Sangre, Humo
+	Hormigas, Cubo, Sangre, Humo, RandomMass
 };
 
 class ParticleSystem
@@ -23,6 +24,7 @@ public:
 
 	void update(double t);
 	void generate();
+	void generatePerpetual();
 
 	ParticleGenerator* getParticleGenerator(std::string name);
 
@@ -32,11 +34,15 @@ public:
 	void appendFireworks(std::list<Particle*> particles);
 
 	void generateGravity();
+	void generateReverseGravity();
 	void generateWind();
 	void generateWhirlwind();
+	void generateExplosion();
 
 	void clearAllGenerators();
 	void clearForces();
+
+	void killAllParticles();
 
 protected:
 	std::list<Particle*> _particles;
@@ -48,7 +54,9 @@ protected:
 	std::list<ForceGenerator*> _force_generators;
 	ForceRegistry* _force_registry;
 	GravityForceGenerator* _gravity_gen;
+	GravityForceGenerator* _reverse_gravity_gen;
 	WindForceGenerator* _wind_gen;
 	WhirlwindForceGenerator* _whirlwind_gen;
+	ExplosionForceGenerator* _explosion_gen;
 };
 

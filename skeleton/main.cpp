@@ -79,14 +79,14 @@ void stepPhysics(bool interactive, double t)
 	gScene->simulate(t);
 	gScene->fetchResults(true);
 
-	for (int i = 0; i < particles.size(); i++) 
+	for (int i = 0; i < particles.size(); i++)
 	{
 		auto p = particles[i];
 
 		if (p->isAlive())
 			p->integrate(t);
 
-		else 
+		else
 		{
 			delete p;
 			particles.erase(particles.begin() + i);
@@ -126,40 +126,65 @@ void keyPress(unsigned char key, const PxTransform& camera)
 
 	switch (toupper(key))
 	{
-		case 'Q':
-			ps->clearAllGenerators();
-			break;
-		case 'B': 
-			particles.push_back(new Proyectile(proyectile, cam->getTransform().p + cam->getDir()*5, cam->getDir()));
-			break;
-		case '1':
-			//proyectile = Bullet;
-			ps->createParticleGenerator(Hormigas);
-			break;
-		case '2':
-			//proyectile = CannonBall;
-			ps->createParticleGenerator(Cubo);
-			break;
-		case '3':
-			//proyectile = Laser;
-			ps->createParticleGenerator(Sangre);
-			break;
-		case '4':
-			//proyectile = Misile;
-			ps->createParticleGenerator(Humo);
-			break;
-		case 'C':
-			ps->generateFireworksSystem(Circle);
-			break;
-		case 'E':
-			ps->generateFireworksSystem(Sphere);
-			break;
-		case 'X':
-			ps->generateFireworksSystem(Star);
-			break;
-		case 'G':
-			ps->generate();
-			break;
+	case 'Q':
+		ps->clearAllGenerators();
+		break;
+	case 'B':
+		particles.push_back(new Proyectile(proyectile, cam->getTransform().p + cam->getDir() * 5, cam->getDir()));
+		break;
+	case '1':
+		//proyectile = Bullet;
+		ps->createParticleGenerator(Hormigas);
+		break;
+	case '2':
+		//proyectile = CannonBall;
+		ps->createParticleGenerator(Cubo);
+		break;
+	case '3':
+		//proyectile = Laser;
+		ps->createParticleGenerator(Sangre);
+		break;
+	case '4':
+		//proyectile = Misile;
+		ps->createParticleGenerator(Humo);
+		break;
+	case '5':
+		//proyectile = Misile;
+		ps->createParticleGenerator(RandomMass);
+		break;
+	case 'C':
+		ps->generateFireworksSystem(Circle);
+		break;
+	case 'E':
+		ps->generateFireworksSystem(Sphere);
+		break;
+	case 'X':
+		ps->generateFireworksSystem(Star);
+		break;
+	case 'G':
+		ps->generate();
+		break;
+	case 'U':
+		ps->generateGravity();
+		break;
+	case 'J':
+		ps->generateReverseGravity();
+		break;
+	case 'I':
+		ps->generateWind();
+		break;
+	case 'O':
+		ps->generateWhirlwind();
+		break;
+	case 'P':
+		ps->generateExplosion();
+		break;
+	case 'Y':
+		ps->clearForces();
+		break;
+	case 'M':
+		ps->killAllParticles();
+		break;
 	case ' ':
 	{
 		break;

@@ -1,7 +1,7 @@
 #include "GaussianParticleGenerator.h"
 
-GaussianParticleGenerator::GaussianParticleGenerator(Vector3 pos, Vector3 vel, Vector3 dev_pos, Vector3 dev_vel, double gen_prob, int num,
-	Color color, float scale, float lifeTime, float lifeDist, float damping, float m )
+GaussianParticleGenerator::GaussianParticleGenerator(Vector3 pos, Vector3 vel, Vector3 dev_pos, Vector3 dev_vel, double gen_prob, int num, bool randomMass,
+	Color color, float scale, float lifeTime, float lifeDist, float damping, float m)
 {
 	_mean_pos = pos;
 	_mean_vel = vel;
@@ -18,6 +18,8 @@ GaussianParticleGenerator::GaussianParticleGenerator(Vector3 pos, Vector3 vel, V
 	_damping = damping;
 
 	_color = color;
+
+	_randomMass = randomMass;
 }
 
 GaussianParticleGenerator::~GaussianParticleGenerator()
@@ -57,6 +59,14 @@ std::list<Particle*> GaussianParticleGenerator::generateParticles()
 				p = _model->clone();
 				p->setPos(pos + _mean_pos);
 				p->setVel(vel + _mean_vel);
+
+				if (_randomMass)
+				{
+					auto m = rand() % 1000 + 100;
+
+					p->setMass(m / 10.0f);
+					p->setScale(m /500.0f);
+				}
 			}
 
 			particles.push_back(p);

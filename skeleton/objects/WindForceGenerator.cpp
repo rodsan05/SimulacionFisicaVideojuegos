@@ -16,7 +16,7 @@ void WindForceGenerator::updateForce(Particle* particle, double t)
 	}
 
 	//compute drag force
-	Vector3 v = windVelocity - particle->getVel();
+	Vector3 v = particle->getVel() - windVelocity;
 	float velocity_module = v.normalize();
 
 	Vector3 dragF;

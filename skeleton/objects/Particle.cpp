@@ -129,6 +129,9 @@ void Particle::setColor(Color c)
 void Particle::setScale(float s)
 {
 	scale = s;
+
+	DeregisterRenderItem(renderItem);
+	renderItem = new RenderItem(CreateShape(physx::PxSphereGeometry(scale)), &pose, color);
 }
 
 void Particle::setMass(float mass)

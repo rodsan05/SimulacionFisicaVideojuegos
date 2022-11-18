@@ -2,7 +2,7 @@
 #include "ParticleSystem.h"
 
 Firework::Firework(ParticleSystem* pSys, Vector3 Pos, Vector3 Vel, Vector3 a_, float damping_, float scale_, Color color_, float lifeTime_, float lifeDist_, float m_) :
-	Particle(Pos, Vel, a_, damping_, scale_, color_, lifeTime_, lifeDist_, m)
+	Particle(Pos, Vel, a_, damping_, scale_, color_, lifeTime_, lifeDist_, m_)
 {
 	_pSys = pSys;
 }

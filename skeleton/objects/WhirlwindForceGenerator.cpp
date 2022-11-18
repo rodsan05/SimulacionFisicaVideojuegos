@@ -19,10 +19,14 @@ void WhirlwindForceGenerator::updateForce(Particle* particle, double t)
 	//compute drag force
 	auto x = -(particle->getPos().z - origen.z);
 	auto y = 50 - (particle->getPos().y - origen.y);
-	auto z = -(particle->getPos().x - origen.x);
+	auto z = particle->getPos().x - origen.x;
+	
+	/*x -= dragToCenterCoef * z;
+	z -= dragToCenterCoef * x;*/
+	
 	windVelocity = K * Vector3(x, y, z);
 
-	Vector3 v = windVelocity - particle->getVel();
+	Vector3 v = particle->getVel() - windVelocity;
 	float velocity_module = v.normalize();
 
 	Vector3 dragF;
