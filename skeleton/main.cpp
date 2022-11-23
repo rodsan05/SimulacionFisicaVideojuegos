@@ -156,7 +156,7 @@ void keyPress(unsigned char key, const PxTransform& camera)
 		ps->generateFireworksSystem(Circle);
 		break;
 	case 'E':
-		ps->generateFireworksSystem(Sphere);
+		ps->generateFireworksSystem(SphereFirework);
 		break;
 	case 'X':
 		ps->generateFireworksSystem(Star);
@@ -184,6 +184,9 @@ void keyPress(unsigned char key, const PxTransform& camera)
 		break;
 	case 'M':
 		ps->killAllParticles();
+		break;
+	case 'H':
+		ps->generateSpringDemo();
 		break;
 	case ' ':
 	{

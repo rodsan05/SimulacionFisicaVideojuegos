@@ -4,7 +4,7 @@ Particle::Particle() : vel(), damping(), a(), pose(), color(), renderItem(), lif
 {
 }
 
-Particle::Particle(Vector3 Pos, Vector3 Vel, Vector3 a_, float damping_, float scale_, Color color_, float lifeTime_, float lifeDist_, float m_)
+Particle::Particle(Vector3 Pos, Vector3 Vel, Vector3 a_, float damping_, float scale_, Color color_, float lifeTime_, float lifeDist_, float m_, ParticleShape shape_)
 {
 	force = Vector3(0);
 
@@ -18,9 +18,23 @@ Particle::Particle(Vector3 Pos, Vector3 Vel, Vector3 a_, float damping_, float s
 
 	color = color_;
 
-	renderItem = new RenderItem(CreateShape(physx::PxSphereGeometry(scale_)), &pose, color);
+	physx::PxGeometry shape = physx::PxSphereGeometry(scale_);
 
-	//RegisterRenderItem(renderItem);
+	switch (shape_)
+	{
+	case Sphere:
+		break;
+	case Cube:
+		shape = physx::PxBoxGeometry(scale_, scale_, scale_);
+		break;
+	case Capsule:
+		shape = physx::PxCapsuleGeometry(scale_/4, scale_);
+		break;
+	default:
+		break;
+	}
+
+	renderItem = new RenderItem(CreateShape(shape), &pose, color);
 
 	m = m_;
 

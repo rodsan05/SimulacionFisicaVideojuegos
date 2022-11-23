@@ -6,11 +6,14 @@
 
 using Color = Vector4;
 
+enum ParticleShape 
+{ Sphere, Cube, Capsule };
+
 class Particle
 {
 public:
 	Particle();
-	Particle(Vector3 Pos, Vector3 Vel, Vector3 a_, float damping_, float scale_, Color color, float lifeTime_, float lifeDist_, float m_ = 0);
+	Particle(Vector3 Pos, Vector3 Vel, Vector3 a_, float damping_, float scale_, Color color, float lifeTime_, float lifeDist_, float m_ = 0, ParticleShape shape_ = ParticleShape::Sphere);
 	~Particle();
 
 	bool isAlive();

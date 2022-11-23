@@ -6,6 +6,7 @@
 #include "WindForceGenerator.h"
 #include "WhirlwindForceGenerator.h"
 #include "ExplosionForceGenerator.h"
+#include "SpringForceGenerator.h"
 
 #include <string>
 
@@ -38,6 +39,8 @@ public:
 	void generateWind();
 	void generateWhirlwind();
 	void generateExplosion();
+
+	void generateSpringDemo();
 
 	void clearAllGenerators();
 	void clearForces();

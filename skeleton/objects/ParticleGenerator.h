@@ -6,7 +6,7 @@
 
 enum FireworkType 
 {
-	Circle, Sphere, Star
+	Circle, SphereFirework, Star
 };
 
 class ParticleGenerator
