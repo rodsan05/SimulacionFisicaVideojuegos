@@ -18,23 +18,23 @@ Particle::Particle(Vector3 Pos, Vector3 Vel, Vector3 a_, float damping_, float s
 
 	color = color_;
 
-	physx::PxGeometry shape = physx::PxSphereGeometry(scale_);
+	auto partShape = CreateShape(physx::PxSphereGeometry(scale_));
 
 	switch (shape_)
 	{
 	case Sphere:
 		break;
 	case Cube:
-		shape = physx::PxBoxGeometry(scale_, scale_, scale_);
+		partShape = CreateShape(physx::PxBoxGeometry(scale_, scale_, scale_));
 		break;
 	case Capsule:
-		shape = physx::PxCapsuleGeometry(scale_/4, scale_);
+		partShape = CreateShape(physx::PxCapsuleGeometry(scale_/4, scale_));
 		break;
 	default:
 		break;
 	}
 
-	renderItem = new RenderItem(CreateShape(shape), &pose, color);
+	renderItem = new RenderItem(partShape, &pose, color);
 
 	m = m_;
 

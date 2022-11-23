@@ -301,8 +301,8 @@ void ParticleSystem::generateExplosion()
 void ParticleSystem::generateSpringDemo()
 {
 	// First one standard spring uniting 2 particles
-	Particle* p1 = new Particle(Vector3(-10.0, 10.0, 0.0), Vector3(0.0, 0.0, 0.0), Vector3(0.0, 0.0, 0.0), 0.85, 1, Color(0.9, 0.8, 0.05, 1), -1, -1, 60);
-	Particle* p2 = new Particle(Vector3(10.0, 10.0, 0.0), Vector3(0.0, 0.0, 0.0), Vector3(0.0, 0.0, 0.0), 0.85, 1, Color(0.5, 0.5, 0.5, 1), -1, -1, 60);
+	Particle* p1 = new Particle(Vector3(-10.0, 10.0, 0.0), Vector3(0), Vector3(0), 0.85, 1, Color(0.9, 0.8, 0.05, 1), -1, -1, 60);
+	Particle* p2 = new Particle(Vector3(10.0, 10.0, 0.0), Vector3(0), Vector3(0), 0.85, 1, Color(0.5, 0.5, 0.5, 1), -1, -1, 60);
 	p1->setMass(1.0);
 	p2->setMass(1.0);
 	
@@ -315,6 +315,14 @@ void ParticleSystem::generateSpringDemo()
 	_force_generators.push_back(f2);
 	_particles.push_back(p1);
 	_particles.push_back(p2);
+
+	// Then one spring with one fixed side
+	Particle* p3 = new Particle(Vector3(- 10.0, 20.0, 0.0 ), Vector3(0), Vector3(0), 0.85, 1, Color(0.9, 0.05, 0.8, 1), -1, -1, 2);
+	AnchoredSpringFG* f3 = new AnchoredSpringFG(1, 10, Vector3(10.0, 20.0, 0.0));
+	
+	_force_registry->addRegistry(f3, p3);
+	_force_generators.push_back(f3); 
+	_particles.push_back(p3);
 }
 
 void ParticleSystem::clearForces()

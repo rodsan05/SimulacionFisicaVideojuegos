@@ -253,6 +253,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="objects\AnchoredSpringFG.cpp" />
     <ClCompile Include="callbacks.cpp" />
     <ClCompile Include="objects\ExplosionForceGenerator.cpp" />
     <ClCompile Include="objects\DragForceGenerator.cpp" />
@@ -273,6 +274,7 @@
     <ClCompile Include="objects\WhirlwindForceGenerator.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="objects\AnchoredSpringFG.h" />
     <ClInclude Include="callbacks.hpp" />
     <ClInclude Include="objects\ExplosionForceGenerator.h" />
     <ClInclude Include="objects\DragForceGenerator.h" />

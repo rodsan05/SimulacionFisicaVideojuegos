@@ -23,6 +23,7 @@
     <ClCompile Include="objects\WindForceGenerator.cpp" />
     <ClCompile Include="objects\WhirlwindForceGenerator.cpp" />
     <ClCompile Include="objects\ExplosionForceGenerator.cpp" />
+    <ClCompile Include="objects\AnchoredSpringFG.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core.hpp" />
@@ -52,6 +53,7 @@
     <ClInclude Include="objects\WhirlwindForceGenerator.h" />
     <ClInclude Include="objects\ExplosionForceGenerator.h" />
     <ClInclude Include="objects\SpringForceGenerator.h" />
+    <ClInclude Include="objects\AnchoredSpringFG.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Render">

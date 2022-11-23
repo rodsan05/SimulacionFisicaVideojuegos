@@ -7,6 +7,7 @@
 #include "WhirlwindForceGenerator.h"
 #include "ExplosionForceGenerator.h"
 #include "SpringForceGenerator.h"
+#include "AnchoredSpringFG.h"
 
 #include <string>
 
