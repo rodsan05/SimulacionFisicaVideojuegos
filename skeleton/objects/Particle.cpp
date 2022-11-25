@@ -28,7 +28,7 @@ Particle::Particle(Vector3 Pos, Vector3 Vel, Vector3 a_, float damping_, float s
 		partShape = CreateShape(physx::PxBoxGeometry(scale_, scale_, scale_));
 		break;
 	case Capsule:
-		partShape = CreateShape(physx::PxCapsuleGeometry(scale_/4, scale_));
+		partShape = CreateShape(physx::PxCapsuleGeometry(scale_ / 4, scale_));
 		break;
 	default:
 		break;
@@ -65,15 +65,31 @@ void Particle::integrate(double t)
 
 	if (inverse_mass <= 0.0f) return;
 
-	pose.p += vel * t;
+	if (!eulerSemiImplicito)
+	{
+		pose.p += vel * t;
 
-	Vector3 totalAccel = a;
-	totalAccel += force * inverse_mass;
+		Vector3 totalAccel = a;
+		totalAccel += force * inverse_mass;
 
-	//update linear vel
-	vel += totalAccel * t;
-	//damping
-	vel *= powf(damping, t);
+		//update linear vel
+		vel += totalAccel * t;
+		//damping
+		vel *= powf(damping, t);
+	}
+
+	else
+	{
+		Vector3 totalAccel = a;
+		totalAccel += force * inverse_mass;
+
+		//update linear vel
+		vel += totalAccel * t;
+		//damping
+		vel *= powf(damping, t);
+
+		pose.p += vel * t;
+	}
 
 	clearForce();
 
@@ -85,24 +101,24 @@ void Particle::integrate(double t)
 	//vel = vel * pow(damping, t) + a * t;
 
 	//comprueba si debe morir por tiempo
-	if (lifeTime != -1) 
+	if (lifeTime != -1)
 	{
 		auto time = glutGet(GLUT_ELAPSED_TIME);
 
 		auto elapsedTime = time - iniTime;
 
-		if (elapsedTime > lifeTime) 
+		if (elapsedTime > lifeTime)
 		{
 			alive = false;
 		}
 	}
 
 	//comprueba si debe morir por distancia
-	if (lifeDistance != -1) 
+	if (lifeDistance != -1)
 	{
 		auto distance = (pose.p - initPos).magnitudeSquared();
 
-		if (distance > pow(lifeDistance, 2)) 
+		if (distance > pow(lifeDistance, 2))
 		{
 			alive = false;
 		}

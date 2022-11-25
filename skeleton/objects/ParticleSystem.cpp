@@ -145,7 +145,7 @@ void ParticleSystem::generatePerpetual()
 
 			for (auto p : list)
 			{
-				if (_gravity_gen != nullptr)
+				if (_gravity_gen != nullptr && p->isAffectedByGravity())
 					_force_registry->addRegistry(_gravity_gen, p);
 
 				if (_reverse_gravity_gen != nullptr)
@@ -238,7 +238,8 @@ void ParticleSystem::generateGravity()
 
 		for (auto p : _particles)
 		{
-			_force_registry->addRegistry(_gravity_gen, p);
+			if (p->isAffectedByGravity())
+				_force_registry->addRegistry(_gravity_gen, p);
 		}
 	}
 }
@@ -301,18 +302,18 @@ void ParticleSystem::generateExplosion()
 void ParticleSystem::generateSpringDemo()
 {
 	// First one standard spring uniting 2 particles
-	Particle* p1 = new Particle(Vector3(-10.0, 10.0, 0.0), Vector3(0), Vector3(0), 0.85, 1, Color(0.9, 0.8, 0.05, 1), -1, -1, 60);
-	Particle* p2 = new Particle(Vector3(10.0, 10.0, 0.0), Vector3(0), Vector3(0), 0.85, 1, Color(0.5, 0.5, 0.5, 1), -1, -1, 60);
+	Particle* p1 = new Particle(Vector3(-12.0, 10.0, 0.0), Vector3(0), Vector3(0), 0.85, 1, Color(0.9, 0.8, 0.05, 1), -1, -1, 60);
+	Particle* p2 = new Particle(Vector3(12.0, 10.0, 0.0), Vector3(0), Vector3(0), 0.85, 1, Color(0.5, 0.5, 0.5, 1), -1, -1, 60);
 	p1->setMass(1.0);
 	p2->setMass(1.0);
 	
-	SpringForceGenerator * f1 = new SpringForceGenerator(5, 10, p2);
+	SpringForceGenerator * f1 = new SpringForceGenerator(500, 10, p2);
 	_force_registry->addRegistry(f1, p1);
-	SpringForceGenerator * f2 = new SpringForceGenerator(5, 10, p1);
+	SpringForceGenerator * f2 = new SpringForceGenerator(500, 10, p1);
 	_force_registry->addRegistry(f2, p2);
 	
-	_force_generators.push_back(f1);
-	_force_generators.push_back(f2);
+	_spring_generators.push_back(f1);
+	_spring_generators.push_back(f2);
 	_particles.push_back(p1);
 	_particles.push_back(p2);
 
@@ -321,7 +322,7 @@ void ParticleSystem::generateSpringDemo()
 	AnchoredSpringFG* f3 = new AnchoredSpringFG(1, 10, Vector3(10.0, 20.0, 0.0));
 	
 	_force_registry->addRegistry(f3, p3);
-	_force_generators.push_back(f3); 
+	_spring_generators.push_back(f3); 
 	_particles.push_back(p3);
 }
 
@@ -353,4 +354,20 @@ void ParticleSystem::killAllParticles()
 	for (auto p : _particles) p->setAlive(false);
 
 	for (auto f : _firework_pool) f->setAlive(false);
+}
+
+void ParticleSystem::incrementAllSprings(double increment)
+{
+	for (auto f : _spring_generators) 
+	{
+		f->incrementK(increment);
+	}
+}
+
+void ParticleSystem::decrementAllSprings(double decrement)
+{
+	for (auto f : _spring_generators)
+	{
+		f->decrementK(decrement);
+	}
 }

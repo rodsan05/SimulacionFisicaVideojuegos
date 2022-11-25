@@ -39,6 +39,9 @@ public:
 	void clearForce();
 	void addForce(const Vector3& f);
 
+	void setAffectedByGravity(bool set) { affectedByGravity = set; }
+	bool isAffectedByGravity() { return affectedByGravity; }
+
 	float getMass() { return m; };
 	Vector3 getVel() { return vel; };
 	Vector3 getPos() { return pose.p; };
@@ -67,5 +70,8 @@ protected:
 	Vector3 initPos;
 
 	Vector3 force;
+
+	bool affectedByGravity = true;
+	bool eulerSemiImplicito = true;
 };
 

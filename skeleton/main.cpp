@@ -188,6 +188,10 @@ void keyPress(unsigned char key, const PxTransform& camera)
 	case 'H':
 		ps->generateSpringDemo();
 		break;
+	case '+':
+		ps->incrementAllSprings(1);
+	case '-':
+		ps->decrementAllSprings(1);
 	case ' ':
 	{
 		break;

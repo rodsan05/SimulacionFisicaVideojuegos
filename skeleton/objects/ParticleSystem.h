@@ -48,6 +48,9 @@ public:
 
 	void killAllParticles();
 
+	void incrementAllSprings(double increment);
+	void decrementAllSprings(double decrement);
+
 protected:
 	std::list<Particle*> _particles;
 	std::list<Particle*> _firework_pool;
@@ -56,6 +59,7 @@ protected:
 	ParticleGenerator* _firework_gen;
 
 	std::list<ForceGenerator*> _force_generators;
+	std::list<SpringForceGenerator*> _spring_generators;
 	ForceRegistry* _force_registry;
 	GravityForceGenerator* _gravity_gen;
 	GravityForceGenerator* _reverse_gravity_gen;
