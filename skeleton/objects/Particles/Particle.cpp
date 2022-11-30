@@ -30,6 +30,9 @@ Particle::Particle(Vector3 Pos, Vector3 Vel, Vector3 a_, float damping_, float s
 	case Capsule:
 		partShape = CreateShape(physx::PxCapsuleGeometry(scale_ / 4, scale_));
 		break;
+	case Plane:
+		partShape = CreateShape(physx::PxBoxGeometry(scale_, 0.5, scale_));
+		break;
 	default:
 		break;
 	}

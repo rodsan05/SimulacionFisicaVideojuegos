@@ -1,7 +1,7 @@
 #pragma once
 
 #include <map>
-#include "ForceGenerator.h"
+#include "ForceGenerators/ForceGenerator.h"
 
 using FRPair = std::pair<Particle*, ForceGenerator*>;
 

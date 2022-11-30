@@ -8,8 +8,8 @@
 #include "RenderUtils.hpp"
 #include "callbacks.hpp"
 
-#include "objects/Particle.h"
-#include "objects/Proyectile.h"
+#include "objects/Particles/Particle.h"
+#include "objects/Particles/Proyectile.h"
 #include "objects/ParticleSystem.h"
 
 #include <iostream>
@@ -187,6 +187,12 @@ void keyPress(unsigned char key, const PxTransform& camera)
 		break;
 	case 'H':
 		ps->generateSpringDemo();
+		break;
+	case 'F':
+		ps->generateFloatingDemo();
+		break;
+	case 'Z':
+		ps->generateSlinky();
 		break;
 	case '+':
 		ps->incrementAllSprings(1);

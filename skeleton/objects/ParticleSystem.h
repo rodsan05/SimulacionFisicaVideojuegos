@@ -1,13 +1,8 @@
 #pragma once
-#include "ParticleGenerator.h"
+#include "ParticleGenerators/ParticleGenerator.h"
 #include "ForceRegistry.hpp"
-#include "Firework.h"
-#include "GravityForceGenerator.h"
-#include "WindForceGenerator.h"
-#include "WhirlwindForceGenerator.h"
-#include "ExplosionForceGenerator.h"
-#include "SpringForceGenerator.h"
-#include "AnchoredSpringFG.h"
+#include "Particles/Firework.h"
+#include "IncludeFiles/ForceGeneratorsIncludes.h"
 
 #include <string>
 
@@ -42,6 +37,8 @@ public:
 	void generateExplosion();
 
 	void generateSpringDemo();
+	void generateSlinky();
+	void generateFloatingDemo();
 
 	void clearAllGenerators();
 	void clearForces();

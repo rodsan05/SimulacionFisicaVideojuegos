@@ -1,9 +1,5 @@
 #include "ParticleSystem.h"
-#include "GaussianParticleGenerator.h"
-#include "UniformParticleGenerator.h"
-#include "CircleParticleGenerator.h"
-#include "SphereParticleGenerator.h"
-#include "StarParticleGenerator.h"
+#include "IncludeFiles/ParticleGeneratorsIncludes.h"
 
 ParticleSystem::ParticleSystem() : _gravity_gen(nullptr), _wind_gen(nullptr), _whirlwind_gen(nullptr), _firework_gen(nullptr),
 _explosion_gen(nullptr), _reverse_gravity_gen(nullptr)
@@ -306,24 +302,70 @@ void ParticleSystem::generateSpringDemo()
 	Particle* p2 = new Particle(Vector3(12.0, 10.0, 0.0), Vector3(0), Vector3(0), 0.85, 1, Color(0.5, 0.5, 0.5, 1), -1, -1, 60);
 	p1->setMass(1.0);
 	p2->setMass(1.0);
-	
-	SpringForceGenerator * f1 = new SpringForceGenerator(500, 10, p2);
+
+	SpringForceGenerator* f1 = new SpringForceGenerator(500, 10, p2);
 	_force_registry->addRegistry(f1, p1);
-	SpringForceGenerator * f2 = new SpringForceGenerator(500, 10, p1);
+	SpringForceGenerator* f2 = new SpringForceGenerator(500, 10, p1);
 	_force_registry->addRegistry(f2, p2);
-	
+
 	_spring_generators.push_back(f1);
 	_spring_generators.push_back(f2);
 	_particles.push_back(p1);
 	_particles.push_back(p2);
 
 	// Then one spring with one fixed side
-	Particle* p3 = new Particle(Vector3(- 10.0, 20.0, 0.0 ), Vector3(0), Vector3(0), 0.85, 1, Color(0.9, 0.05, 0.8, 1), -1, -1, 2);
+	Particle* p3 = new Particle(Vector3(-10.0, 20.0, 0.0), Vector3(0), Vector3(0), 0.85, 1, Color(0.9, 0.05, 0.8, 1), -1, -1, 2);
 	AnchoredSpringFG* f3 = new AnchoredSpringFG(1, 10, Vector3(10.0, 20.0, 0.0));
-	
+
 	_force_registry->addRegistry(f3, p3);
-	_spring_generators.push_back(f3); 
+	_spring_generators.push_back(f3);
 	_particles.push_back(p3);
+}
+
+void ParticleSystem::generateSlinky()
+{
+	float distance = -5.0;
+	float iniY = 30;
+
+	auto p0 = new Particle(Vector3(0.0, iniY - distance, 0.0), Vector3(0), Vector3(0), 0.85, 1, Color(1, 1, 1, 1), -1, -1, 1);
+	auto f0 = new AnchoredSpringFG(5, 1, Vector3(0.0, iniY - 2 * distance, 0.0));
+	_force_registry->addRegistry(f0, p0);
+	_particles.push_back(p0);
+
+	for (int i = 0; i < 10; i += 2)
+	{
+		auto p1 = new Particle(Vector3(0.0, iniY + distance * i, 0.0), Vector3(0), Vector3(0), 0.85, 1, Color(0.9 - (i * 0.1), 0.9 - (i * 0.1), 0.9 - (i * 0.1), 1), -1, -1, 1);
+		auto p2 = new Particle(Vector3(0.0, iniY + distance * (i + 1), 0.0), Vector3(0), Vector3(0), 0.85, 1, Color(0.9 - ((i + 1) * 0.1), 0.9 - ((i + 1) * 0.1), 0.9 - ((i + 1) * 0.1), 1), -1, -1, 1);
+
+		SpringForceGenerator* f0 = new SpringForceGenerator(5, 1, p0);
+		_force_registry->addRegistry(f0, p1);
+		SpringForceGenerator* f1 = new SpringForceGenerator(5, 1, p2);
+		_force_registry->addRegistry(f1, p1);
+		SpringForceGenerator* f2 = new SpringForceGenerator(5, 1, p1);
+		_force_registry->addRegistry(f2, p2);
+		_force_registry->addRegistry(f0, p0);
+
+		_spring_generators.push_back(f0);
+		_spring_generators.push_back(f1);
+		_spring_generators.push_back(f2);
+		_particles.push_back(p1);
+		_particles.push_back(p2);
+
+		p0 = p2;
+	}
+}
+
+void ParticleSystem::generateFloatingDemo()
+{
+	Particle* p1 = new Particle(Vector3(0.0, 10.0, 0.0), Vector3(0), Vector3(0), 0.99, 2, Color(0.9, 0.8, 0.05, 1), -1, -1, 60, Cube);
+	Particle* p2 = new Particle(Vector3(0.0, 10.0, 0.0), Vector3(0), Vector3(0), 0.99, 20, Color(0.1, 0.1, 0.9, 1), -1, -1, 1, Plane);
+	p2->setAffectedByGravity(false);
+
+	BouyancyForceGenerator* forceGen = new BouyancyForceGenerator(1000, 30, 20 * 20 * 30);
+
+	_force_registry->addRegistry(forceGen, p1);
+	_particles.push_back(p1);
+	_particles.push_back(p2);
 }
 
 void ParticleSystem::clearForces()
@@ -358,7 +400,7 @@ void ParticleSystem::killAllParticles()
 
 void ParticleSystem::incrementAllSprings(double increment)
 {
-	for (auto f : _spring_generators) 
+	for (auto f : _spring_generators)
 	{
 		f->incrementK(increment);
 	}

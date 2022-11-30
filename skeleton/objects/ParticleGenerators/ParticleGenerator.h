@@ -2,7 +2,7 @@
 #include <string>
 #include <list>
 #include <random>
-#include "Particle.h"
+#include "../Particles/Particle.h"
 
 enum FireworkType 
 {

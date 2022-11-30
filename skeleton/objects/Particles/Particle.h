@@ -1,13 +1,13 @@
 #pragma once
-#include "../core.hpp"
-#include "../RenderUtils.hpp"
+#include "../../core.hpp"
+#include "../../RenderUtils.hpp"
 
 #include <functional>
 
 using Color = Vector4;
 
 enum ParticleShape 
-{ Sphere, Cube, Capsule };
+{ Sphere, Cube, Capsule, Plane };
 
 class Particle
 {
@@ -45,6 +45,11 @@ public:
 	float getMass() { return m; };
 	Vector3 getVel() { return vel; };
 	Vector3 getPos() { return pose.p; };
+
+	float getHeight() 
+	{
+		return scale;
+	}
 
 protected:
 

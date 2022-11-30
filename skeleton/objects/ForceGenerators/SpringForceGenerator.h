@@ -1,6 +1,6 @@
 #pragma once
 #include "ForceGenerator.h"
-#include "../core.hpp"
+#include "../../core.hpp"
 
 class SpringForceGenerator : public ForceGenerator {
 public:
