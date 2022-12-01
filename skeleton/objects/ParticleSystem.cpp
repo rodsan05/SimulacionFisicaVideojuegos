@@ -328,7 +328,7 @@ void ParticleSystem::generateSlinky()
 	float iniY = 30;
 
 	auto p0 = new Particle(Vector3(0.0, iniY - distance, 0.0), Vector3(0), Vector3(0), 0.85, 1, Color(1, 1, 1, 1), -1, -1, 1);
-	auto f0 = new AnchoredSpringFG(5, 1, Vector3(0.0, iniY - 2 * distance, 0.0));
+	auto f0 = new AnchoredSpringFG(5, .5, Vector3(0.0, iniY - 2 * distance, 0.0));
 	_force_registry->addRegistry(f0, p0);
 	_particles.push_back(p0);
 
@@ -337,13 +337,13 @@ void ParticleSystem::generateSlinky()
 		auto p1 = new Particle(Vector3(0.0, iniY + distance * i, 0.0), Vector3(0), Vector3(0), 0.85, 1, Color(0.9 - (i * 0.1), 0.9 - (i * 0.1), 0.9 - (i * 0.1), 1), -1, -1, 1);
 		auto p2 = new Particle(Vector3(0.0, iniY + distance * (i + 1), 0.0), Vector3(0), Vector3(0), 0.85, 1, Color(0.9 - ((i + 1) * 0.1), 0.9 - ((i + 1) * 0.1), 0.9 - ((i + 1) * 0.1), 1), -1, -1, 1);
 
-		SpringForceGenerator* f0 = new SpringForceGenerator(5, 1, p0);
+		SpringForceGenerator* f0 = new SpringForceGenerator(5, .5, p0);
 		_force_registry->addRegistry(f0, p1);
-		SpringForceGenerator* f1 = new SpringForceGenerator(5, 1, p2);
+		SpringForceGenerator* f1 = new SpringForceGenerator(5, .5, p2);
 		_force_registry->addRegistry(f1, p1);
-		SpringForceGenerator* f2 = new SpringForceGenerator(5, 1, p1);
+		SpringForceGenerator* f2 = new SpringForceGenerator(5, .5, p1);
 		_force_registry->addRegistry(f2, p2);
-		_force_registry->addRegistry(f0, p0);
+		_force_registry->addRegistry(f2, p0);
 
 		_spring_generators.push_back(f0);
 		_spring_generators.push_back(f1);

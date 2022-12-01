@@ -23,7 +23,7 @@ public:
 		}
 		else if (length >= _max_lenght)
 		{
-			particle->setVel(-particle->getVel());
+			particle->setVel(-particle->getVel() * 0);
 		}
 
 		else if (!_goma || length > _resting_length)
