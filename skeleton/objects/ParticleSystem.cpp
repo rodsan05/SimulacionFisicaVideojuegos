@@ -65,6 +65,11 @@ void ParticleSystem::update(double t)
 
 	_force_registry->updateForces(t);
 
+	for (auto l : _particle_links) 
+	{
+		l->checkLimit();
+	}
+
 	auto iterador = _particles.begin();
 
 	while (iterador != _particles.end())
@@ -367,6 +372,19 @@ void ParticleSystem::generateFloatingDemo()
 
 	_force_registry->addRegistry(forceGen, p1);
 	_force_registry->addRegistry(dragGen, p1);
+	_particles.push_back(p1);
+	_particles.push_back(p2);
+}
+
+void ParticleSystem::generateRopeDemo()
+{
+	Particle* p1 = new Particle(Vector3(-12.0, 10.0, 0.0), Vector3(0), Vector3(0), 0.85, 1, Color(0.9, 0.8, 0.05, 1), -1, -1, 60);
+	Particle* p2 = new Particle(Vector3(12.0, 10.0, 0.0), Vector3(0), Vector3(0), 0.85, 1, Color(0.5, 0.5, 0.5, 1), -1, -1, 60);
+	p1->setStatic(true);
+
+	auto rope = new ParticleLink(p1, p2, 20, .5);
+	_particle_links.push_back(rope);
+
 	_particles.push_back(p1);
 	_particles.push_back(p2);
 }

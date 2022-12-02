@@ -294,6 +294,7 @@
     <ClInclude Include="objects\Particles\Proyectile.h" />
     <ClInclude Include="objects\ParticleGenerators\ParticleGenerator.h" />
     <ClInclude Include="objects\ParticleSystem.h" />
+    <ClInclude Include="objects\Constraints\ParticleLink.h" />
     <ClInclude Include="RenderUtils.hpp" />
     <ClInclude Include="Render\Camera.h" />
     <ClInclude Include="Render\Render.h" />

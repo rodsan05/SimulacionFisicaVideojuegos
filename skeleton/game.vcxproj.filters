@@ -58,6 +58,7 @@
     <ClInclude Include="objects\ForceGenerators\BouyancyForceGenerator.h" />
     <ClInclude Include="objects\IncludeFiles\ForceGeneratorsIncludes.h" />
     <ClInclude Include="objects\IncludeFiles\ParticleGeneratorsIncludes.h" />
+    <ClInclude Include="objects\Constraints\ParticleLink.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Render">

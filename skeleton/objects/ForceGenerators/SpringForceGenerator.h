@@ -4,8 +4,8 @@
 
 class SpringForceGenerator : public ForceGenerator {
 public:
-	SpringForceGenerator(double k, double resting_length, Particle* other, double minLenght = 0.5, double maxLenght = 1000000000, bool goma = false) : 
-		_resting_length(resting_length), _k(k), _other(other), _goma(goma), _max_lenght(maxLenght), _min_lenght(minLenght) {}
+	SpringForceGenerator(double k, double resting_length, Particle* other, double minLenght = 0.5, double maxLenght = 100, double ruptureLenght = 150, bool goma = false) :
+		_resting_length(resting_length), _k(k), _other(other), _goma(goma), _max_length(maxLenght), _min_length(minLenght), _rupture_length(ruptureLenght) {}
 
 	virtual ~SpringForceGenerator() {}
 	
@@ -17,13 +17,20 @@ public:
 		const float length = force.normalize(); 
 		const float delta_x = length - _resting_length;
 		
-		if (length <= _min_lenght) 
+		if (length <= _min_length) 
 		{
-			particle->setVel(-particle->getVel());
+			particle->setVel(-particle->getVel() * 0.1);
 		}
-		else if (length >= _max_lenght)
+		else if (length >= _max_length)
 		{
-			particle->setVel(-particle->getVel() * 0);
+			if (length >= _rupture_length) 
+			{
+				force = Vector3(0);
+				return;
+			}
+
+			force *= sqrt(delta_x) * _k;
+			particle->addForce(force);
 		}
 
 		else if (!_goma || length > _resting_length)
@@ -46,7 +53,7 @@ protected:
 	double _resting_length;
 	Particle* _other;
 
-	double _max_lenght, _min_lenght;
+	double _max_length, _min_length, _rupture_length;
 
 	bool _goma;
 };

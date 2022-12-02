@@ -194,6 +194,9 @@ void keyPress(unsigned char key, const PxTransform& camera)
 	case 'Z':
 		ps->generateSlinky();
 		break;
+	case 'R':
+		ps->generateRopeDemo();
+		break;
 	case '+':
 		ps->incrementAllSprings(1);
 	case '-':

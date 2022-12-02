@@ -2,8 +2,6 @@
 #include "../../core.hpp"
 #include "../../RenderUtils.hpp"
 
-#include <functional>
-
 using Color = Vector4;
 
 enum ParticleShape 
@@ -51,6 +49,16 @@ public:
 		return scale;
 	}
 
+	void setStatic(bool s) 
+	{
+		_static = s;
+	}
+
+	bool isStatic() 
+	{
+		return _static;
+	}
+
 protected:
 
 	void setParticle(Vector3 Pos, Vector3 Vel, Vector3 a_, float damping_, float scale_, Color color, float lifeTime_, float lifeDist_, float m_ = 0);
@@ -78,5 +86,6 @@ protected:
 
 	bool affectedByGravity = true;
 	bool eulerSemiImplicito = true;
+	bool _static = false;
 };
 

@@ -64,6 +64,8 @@ void Particle::setAlive(bool set)
 
 void Particle::integrate(double t)
 {
+	if (_static) return;
+
 	float inverse_mass = 1.0 / m;
 
 	if (inverse_mass <= 0.0f) return;

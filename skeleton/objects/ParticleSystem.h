@@ -3,6 +3,7 @@
 #include "ForceRegistry.hpp"
 #include "Particles/Firework.h"
 #include "IncludeFiles/ForceGeneratorsIncludes.h"
+#include "Constraints/ParticleLink.h"
 
 #include <string>
 
@@ -39,6 +40,7 @@ public:
 	void generateSpringDemo();
 	void generateSlinky();
 	void generateFloatingDemo();
+	void generateRopeDemo();
 
 	void clearAllGenerators();
 	void clearForces();
@@ -57,6 +59,7 @@ protected:
 
 	std::list<ForceGenerator*> _force_generators;
 	std::list<SpringForceGenerator*> _spring_generators;
+	std::list<ParticleLink*> _particle_links;
 	ForceRegistry* _force_registry;
 	GravityForceGenerator* _gravity_gen;
 	GravityForceGenerator* _reverse_gravity_gen;
