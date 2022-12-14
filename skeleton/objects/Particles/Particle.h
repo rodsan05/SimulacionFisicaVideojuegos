@@ -17,7 +17,7 @@ public:
 	bool isAlive();
 	void setAlive(bool set);
 
-	void integrate(double t);
+	virtual void integrate(double t);
 
 	virtual Particle* clone() const;
 

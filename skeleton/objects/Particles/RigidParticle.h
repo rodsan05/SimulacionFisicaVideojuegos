@@ -83,6 +83,7 @@ public:
 	}
 	~RigidParticle();
 
+	void integrate(double t) override {} //empty integrate, physx integrate for us
 
 	virtual RigidParticle* clone() const override 
 	{
