@@ -1,6 +1,7 @@
 #pragma once
 #include "ParticleGenerators/ParticleGenerator.h"
 #include "ForceRegistry.hpp"
+#include "Particles/RigidParticle.h"
 #include "Particles/Firework.h"
 #include "IncludeFiles/ForceGeneratorsIncludes.h"
 #include "Constraints/ParticleLink.h"
@@ -15,7 +16,7 @@ enum ParticleGenType
 class ParticleSystem
 {
 public:
-	ParticleSystem();
+	ParticleSystem(physx::PxScene* scene, physx::PxPhysics* physics);
 	~ParticleSystem();
 
 	void createParticleGenerator(ParticleGenType type);
@@ -51,6 +52,10 @@ public:
 	void decrementAllSprings(double decrement);
 
 protected:
+
+	physx::PxScene* _scene; 
+	physx::PxPhysics* _physics;
+
 	std::list<Particle*> _particles;
 	std::list<Particle*> _firework_pool;
 

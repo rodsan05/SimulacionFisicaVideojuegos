@@ -11,7 +11,7 @@ class Particle
 {
 public:
 	Particle();
-	Particle(Vector3 Pos, Vector3 Vel, Vector3 a_, float damping_, float scale_, Color color, float lifeTime_, float lifeDist_, float m_ = 0, ParticleShape shape_ = ParticleShape::Sphere);
+	Particle(Vector3 Pos, Vector3 Vel, Vector3 a_, float damping_, float scale_, Color color_, float lifeTime_, float lifeDist_, float m_ = 0, ParticleShape shape_ = ParticleShape::Sphere);
 	~Particle();
 
 	bool isAlive();
@@ -59,6 +59,16 @@ public:
 		return _static;
 	}
 
+	float getVolume() 
+	{
+		return volume;
+	}
+
+	void setVolume(float vol) 
+	{
+		volume = vol;
+	}
+
 protected:
 
 	void setParticle(Vector3 Pos, Vector3 Vel, Vector3 a_, float damping_, float scale_, Color color, float lifeTime_, float lifeDist_, float m_ = 0);
@@ -66,7 +76,7 @@ protected:
 	Vector3 vel;
 	physx::PxTransform pose;
 	RenderItem* renderItem;
-
+	ParticleShape shape;
 	Color color;
 
 	Vector3 a;
@@ -74,6 +84,7 @@ protected:
 
 	float scale;
 	float m;
+	float volume;
 	
 	bool alive = true;
 	double lifeTime;

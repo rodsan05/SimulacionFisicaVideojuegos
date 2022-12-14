@@ -1,8 +1,8 @@
 #include "ParticleSystem.h"
 #include "IncludeFiles/ParticleGeneratorsIncludes.h"
 
-ParticleSystem::ParticleSystem() : _gravity_gen(nullptr), _wind_gen(nullptr), _whirlwind_gen(nullptr), _firework_gen(nullptr),
-_explosion_gen(nullptr), _reverse_gravity_gen(nullptr)
+ParticleSystem::ParticleSystem(physx::PxScene* scene, physx::PxPhysics* physics) : _gravity_gen(nullptr), _wind_gen(nullptr), _whirlwind_gen(nullptr), _firework_gen(nullptr),
+_explosion_gen(nullptr), _reverse_gravity_gen(nullptr), _scene(scene), _physics(physics)
 {
 	_force_registry = new ForceRegistry();
 }
@@ -33,7 +33,7 @@ void ParticleSystem::createParticleGenerator(ParticleGenType type)
 		generator->setPerpetual(true);
 		break;
 	case Cubo:
-		p = new Particle(Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0), 0.999f, 1, Color(0.2, 0.2, 0.9, 1), -1, 1000, 1);
+		p = new RigidParticle(_scene, _physics, false, Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0), 0.999f, 1, Color(0.2, 0.2, 0.9, 1), -1, 1000, 1);
 		p->deregisterRender();
 		generator = new UniformParticleGenerator({ -15, 0, 0 }, { 0, 0,0 }, { 30, 30, 30 }, { 1, 1, 1 }, 0.8, 20);
 		generator->setParticle(p);
@@ -363,8 +363,8 @@ void ParticleSystem::generateSlinky()
 
 void ParticleSystem::generateFloatingDemo()
 {
-	Particle* p1 = new Particle(Vector3(0.0, 10.0, 0.0), Vector3(0), Vector3(0), 0.99, 2, Color(0.9, 0.8, 0.05, 1), -1, -1, 60, Cube);
-	Particle* p2 = new Particle(Vector3(0.0, 10.0, 0.0), Vector3(0), Vector3(0), 0.99, 20, Color(0.1, 0.1, 0.9, 1), -1, -1, 1, Plane);
+	Particle* p1 = new Particle(Vector3(0.0, 10.0, 0.0), Vector3(0), Vector3(0), 0.999f, 2, Color(0.9, 0.8, 0.05, 1), -1, -1, 60, Cube);
+	Particle* p2 = new Particle(Vector3(0.0, 10.0, 0.0), Vector3(0), Vector3(0), 0.999f, 20, Color(0.1, 0.1, 0.9, 1), -1, -1, 1, Plane);
 	p2->setAffectedByGravity(false);
 
 	BouyancyForceGenerator* forceGen = new BouyancyForceGenerator(1000, 30, 20 * 20 * 30);

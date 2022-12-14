@@ -65,7 +65,7 @@ void initPhysics(bool interactive)
 
 	proyectile = ProyectileType::Bullet;
 
-	ps = new ParticleSystem();
+	ps = new ParticleSystem(gScene, gPhysics);
 }
 
 

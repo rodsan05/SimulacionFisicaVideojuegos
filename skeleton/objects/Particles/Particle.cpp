@@ -18,6 +18,8 @@ Particle::Particle(Vector3 Pos, Vector3 Vel, Vector3 a_, float damping_, float s
 
 	color = color_;
 
+	shape = shape_;
+
 	auto partShape = CreateShape(physx::PxSphereGeometry(scale_));
 
 	switch (shape_)
@@ -26,12 +28,15 @@ Particle::Particle(Vector3 Pos, Vector3 Vel, Vector3 a_, float damping_, float s
 		break;
 	case Cube:
 		partShape = CreateShape(physx::PxBoxGeometry(scale_, scale_, scale_));
+		volume = pow(scale_, 3);
 		break;
 	case Capsule:
 		partShape = CreateShape(physx::PxCapsuleGeometry(scale_ / 4, scale_));
+		volume = (physx::PxPi * pow(scale_ / 4, 2) * scale_ * 2) + ((4 / 3) * physx::PxPi * pow(scale / 4, 3)); //cilinder area + sphere area
 		break;
 	case Plane:
 		partShape = CreateShape(physx::PxBoxGeometry(scale_, 0.5, scale_));
+		volume = pow(scale_, 2) * 0.5;
 		break;
 	default:
 		break;
