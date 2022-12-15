@@ -21,7 +21,7 @@ public:
 
 	virtual Particle* clone() const;
 
-	void setPos(Vector3 pos);
+	virtual void setPos(Vector3 pos);
 	void setVel(Vector3 vel);
 
 	void setLifeTime(float time);

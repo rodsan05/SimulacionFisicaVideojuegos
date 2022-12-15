@@ -1,10 +1,11 @@
 #include "ParticleSystem.h"
 #include "IncludeFiles/ParticleGeneratorsIncludes.h"
 
-ParticleSystem::ParticleSystem(physx::PxScene* scene, physx::PxPhysics* physics) : _gravity_gen(nullptr), _wind_gen(nullptr), _whirlwind_gen(nullptr), _firework_gen(nullptr),
+ParticleSystem::ParticleSystem(physx::PxScene* scene, physx::PxPhysics* physics, int maxParticles) : _gravity_gen(nullptr), _wind_gen(nullptr), _whirlwind_gen(nullptr), _firework_gen(nullptr),
 _explosion_gen(nullptr), _reverse_gravity_gen(nullptr), _scene(scene), _physics(physics)
 {
 	_force_registry = new ForceRegistry();
+	_maxParticles = maxParticles;
 }
 
 ParticleSystem::~ParticleSystem()
@@ -33,7 +34,7 @@ void ParticleSystem::createParticleGenerator(ParticleGenType type)
 		generator->setPerpetual(true);
 		break;
 	case Cubo:
-		p = new RigidParticle(_scene, _physics, false, Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0), 0.999f, 1, Color(0.2, 0.2, 0.9, 1), -1, 1000, 1);
+		p = new Particle(Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0), 0.999f, 1, Color(0.2, 0.2, 0.9, 1), -1, 1000, 1);
 		p->deregisterRender();
 		generator = new UniformParticleGenerator({ -15, 0, 0 }, { 0, 0,0 }, { 30, 30, 30 }, { 1, 1, 1 }, 0.8, 20);
 		generator->setParticle(p);
@@ -49,6 +50,13 @@ void ParticleSystem::createParticleGenerator(ParticleGenType type)
 		p = new Particle(Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 5, 0), 0.999f, 0.5, Color(0.6, 0.5, 0.4, 1), -1, 200, 1);
 		p->deregisterRender();
 		generator = new GaussianParticleGenerator({ 0, 0, 0 }, { 0, 0, 0 }, { 2.5, 5, 0.001f }, { 0.001f, 0.001f, 0.001f }, 1, 5);
+		generator->setParticle(p);
+		generator->setPerpetual(true);
+		break;
+	case RigidDemo:
+		p = new RigidParticle(_scene, _physics, false, Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0), 0.999f, 2, Color(0.7, 0.9, 0.05, 1), -1, 500, 1);
+		p->deregisterRender();
+		generator = new GaussianParticleGenerator({ 0, 100, 0 }, { 0, 0, 0 }, { 100, 5, 100 }, { 0.001f, 0.001f, 0.001f }, 1, 1);
 		generator->setParticle(p);
 		generator->setPerpetual(true);
 		break;
@@ -113,40 +121,15 @@ void ParticleSystem::update(double t)
 
 void ParticleSystem::generate()
 {
-	for (auto g : _particle_generators)
+	if (_particles.size() <= _maxParticles)
 	{
-		auto list = g->generateParticles();
-
-		for (auto p : list)
-		{
-			if (_gravity_gen != nullptr)
-				_force_registry->addRegistry(_gravity_gen, p);
-
-			if (_reverse_gravity_gen != nullptr)
-				_force_registry->addRegistry(_reverse_gravity_gen, p);
-
-			if (_wind_gen != nullptr)
-				_force_registry->addRegistry(_wind_gen, p);
-
-			if (_whirlwind_gen != nullptr)
-				_force_registry->addRegistry(_whirlwind_gen, p);
-		}
-
-		appendParticles(list);
-	}
-}
-
-void ParticleSystem::generatePerpetual()
-{
-	for (auto g : _particle_generators)
-	{
-		if (g->isPerpetual())
+		for (auto g : _particle_generators)
 		{
 			auto list = g->generateParticles();
 
 			for (auto p : list)
 			{
-				if (_gravity_gen != nullptr && p->isAffectedByGravity())
+				if (_gravity_gen != nullptr)
 					_force_registry->addRegistry(_gravity_gen, p);
 
 				if (_reverse_gravity_gen != nullptr)
@@ -160,6 +143,37 @@ void ParticleSystem::generatePerpetual()
 			}
 
 			appendParticles(list);
+		}
+	}
+}
+
+void ParticleSystem::generatePerpetual()
+{
+	if (_particles.size() <= _maxParticles)
+	{
+		for (auto g : _particle_generators)
+		{
+			if (g->isPerpetual())
+			{
+				auto list = g->generateParticles();
+
+				for (auto p : list)
+				{
+					if (_gravity_gen != nullptr && p->isAffectedByGravity())
+						_force_registry->addRegistry(_gravity_gen, p);
+
+					if (_reverse_gravity_gen != nullptr)
+						_force_registry->addRegistry(_reverse_gravity_gen, p);
+
+					if (_wind_gen != nullptr)
+						_force_registry->addRegistry(_wind_gen, p);
+
+					if (_whirlwind_gen != nullptr)
+						_force_registry->addRegistry(_whirlwind_gen, p);
+				}
+
+				appendParticles(list);
+			}
 		}
 	}
 }

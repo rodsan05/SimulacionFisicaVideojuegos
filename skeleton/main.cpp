@@ -62,10 +62,11 @@ void initPhysics(bool interactive)
 	sceneDesc.filterShader = contactReportFilterShader;
 	sceneDesc.simulationEventCallback = &gContactReportCallback;
 	gScene = gPhysics->createScene(sceneDesc);
+	gScene->setFlag(PxSceneFlag::eENABLE_ACTIVE_ACTORS, true);
 
 	proyectile = ProyectileType::Bullet;
 
-	ps = new ParticleSystem(gScene, gPhysics);
+	ps = new ParticleSystem(gScene, gPhysics, 30);
 }
 
 
@@ -151,6 +152,10 @@ void keyPress(unsigned char key, const PxTransform& camera)
 	case '5':
 		//proyectile = Misile;
 		ps->createParticleGenerator(RandomMass);
+		break;
+	case '6':
+		//proyectile = Misile;
+		ps->createParticleGenerator(RigidDemo);
 		break;
 	case 'C':
 		ps->generateFireworksSystem(Circle);

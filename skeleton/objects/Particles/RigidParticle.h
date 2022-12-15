@@ -70,11 +70,14 @@ public:
 		{
 			rb = physics->createRigidDynamic(pose);
 
+
 			auto rb2 = static_cast<physx::PxRigidBody*>(rb);
 
 			physx::PxRigidBodyExt::updateMassAndInertia(*rb2, m / volume, NULL);
 		}
 	
+		rb->userData = this; //reference to this object used later to update transforms
+
 		rb->attachShape(*partShape);
 		
 		scene->addActor(*rb);
@@ -83,11 +86,51 @@ public:
 	}
 	~RigidParticle();
 
-	void integrate(double t) override {} //empty integrate, physx integrate for us
+	void integrate(double t) override 
+	{
+		pose = rb->getGlobalPose();
+
+		//comprueba si debe morir por tiempo
+		if (lifeTime != -1)
+		{
+			auto time = glutGet(GLUT_ELAPSED_TIME);
+
+			auto elapsedTime = time - iniTime;
+
+			if (elapsedTime > lifeTime)
+			{
+				alive = false;
+			}
+		}
+
+		//comprueba si debe morir por distancia
+		if (lifeDistance != -1)
+		{
+			auto distance = (pose.p - initPos).magnitudeSquared();
+
+			if (distance > pow(lifeDistance, 2))
+			{
+				alive = false;
+			}
+		}
+	}
+
+	void setTransform(physx::PxTransform& tr) 
+	{
+		pose = tr;
+	}
 
 	virtual RigidParticle* clone() const override 
 	{
 		return new RigidParticle(scene, physics, _static, pose.p, vel, a, damping, scale, color, lifeTime, lifeDistance, m, shape);
+	}
+
+	virtual void setPos(Vector3 pos) override
+	{
+		pose.p = pos;
+		initPos = pos;
+
+		rb->setGlobalPose(pose);
 	}
 
 protected:

@@ -10,13 +10,13 @@
 
 enum ParticleGenType
 {
-	Hormigas, Cubo, Sangre, Humo, RandomMass
+	Hormigas, Cubo, Sangre, Humo, RandomMass, RigidDemo
 };
 
 class ParticleSystem
 {
 public:
-	ParticleSystem(physx::PxScene* scene, physx::PxPhysics* physics);
+	ParticleSystem(physx::PxScene* scene, physx::PxPhysics* physics, int maxParticles = 1000);
 	~ParticleSystem();
 
 	void createParticleGenerator(ParticleGenType type);
@@ -55,6 +55,7 @@ protected:
 
 	physx::PxScene* _scene; 
 	physx::PxPhysics* _physics;
+	int _maxParticles;
 
 	std::list<Particle*> _particles;
 	std::list<Particle*> _firework_pool;
