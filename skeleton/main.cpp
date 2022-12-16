@@ -29,6 +29,7 @@ PxMaterial* gMaterial = NULL;
 
 PxPvd* gPvd = NULL;
 
+PxCudaContextManager* gCudaContextManager;
 PxDefaultCpuDispatcher* gDispatcher = NULL;
 PxScene* gScene = NULL;
 ContactReportCallback gContactReportCallback;
@@ -38,6 +39,32 @@ ProyectileType proyectile;
 std::vector<Particle*> particles;
 ParticleSystem* ps;
 
+void createScene()
+{
+	auto floor = new RigidParticle(gScene, gPhysics, true, Vector3(0, -5, 0), Vector3(0), Vector3(0), 0, 40, Color(0.9, 0.9, 0.9, 1), -1, -1, 0, Plane);
+	particles.push_back(floor);
+
+	auto block = new RigidParticle(gScene, gPhysics, true, Vector3(4, -5 + 10, 16), Vector3(0), Vector3(0), 0, 10, Color(0.9, 0, 0.8, 1), -1, -1, 0, Prism, Vector3(0.5, 1, 0.5));
+	particles.push_back(block);
+
+	block = new RigidParticle(gScene, gPhysics, true, Vector3(17, -5 + 4, 5), Vector3(0), Vector3(0), 0, 4, Color(0, 0.8, 0.9, 1), -1, -1, 0, Prism, Vector3(0.75, 1, 0.25));
+	particles.push_back(block);
+
+	block = new RigidParticle(gScene, gPhysics, true, Vector3(-12, -5 + 8, -7), Vector3(0), Vector3(0), 0, 8, Color(0.9, 0.8, 0, 1), -1, -1, 0, Prism, Vector3(0.65, 1, 0.35));
+	particles.push_back(block);
+
+	block = new RigidParticle(gScene, gPhysics, true, Vector3(-40 - 4, -5 + 5, 0), Vector3(0), Vector3(0), 0, 40, Color(0.9, 0.9, 0.9, 1), -1, -1, 0, Prism, Vector3(0.1, 0.2, 1));
+	particles.push_back(block);
+
+	block = new RigidParticle(gScene, gPhysics, true, Vector3(40 + 4, -5 + 5, 0), Vector3(0), Vector3(0), 0, 40, Color(0.9, 0.9, 0.9, 1), -1, -1, 0, Prism, Vector3(0.1, 0.2, 1));
+	particles.push_back(block);
+
+	block = new RigidParticle(gScene, gPhysics, true, Vector3(0, -5 + 5, -40 - 4), Vector3(0), Vector3(0), 0, 40, Color(0.9, 0.9, 0.9, 1), -1, -1, 0, Prism, Vector3(1.2, 0.2, 0.1));
+	particles.push_back(block);
+
+	block = new RigidParticle(gScene, gPhysics, true, Vector3(0, -5 + 5, 40 + 4), Vector3(0), Vector3(0), 0, 40, Color(0.9, 0.9, 0.9, 1), -1, -1, 0, Prism, Vector3(1.2, 0.2, 0.1));
+	particles.push_back(block);
+}
 
 // Initialize physics engine
 void initPhysics(bool interactive)
@@ -55,18 +82,28 @@ void initPhysics(bool interactive)
 	gMaterial = gPhysics->createMaterial(0.5f, 0.5f, 0.6f);
 
 	// For Solid Rigids +++++++++++++++++++++++++++++++++++++
+	PxCudaContextManagerDesc cudaContextManagerDesc;
+
+	//gCudaContextManager = PxCreateCudaContextManager(*gFoundation, cudaContextManagerDesc);
+
 	PxSceneDesc sceneDesc(gPhysics->getTolerancesScale());
 	sceneDesc.gravity = PxVec3(0.0f, -9.8f, 0.0f);
-	gDispatcher = PxDefaultCpuDispatcherCreate(2);
+	gDispatcher = PxDefaultCpuDispatcherCreate(4);
 	sceneDesc.cpuDispatcher = gDispatcher;
 	sceneDesc.filterShader = contactReportFilterShader;
+	//sceneDesc.gpuDispatcher = gCudaContextManager->getGpuDispatcher();
+	/*sceneDesc.flags |= PxSceneFlag::eENABLE_GPU_DYNAMICS;
+	sceneDesc.broadPhaseType = PxBroadPhaseType::eGPU;*/
 	sceneDesc.simulationEventCallback = &gContactReportCallback;
+
 	gScene = gPhysics->createScene(sceneDesc);
 	gScene->setFlag(PxSceneFlag::eENABLE_ACTIVE_ACTORS, true);
 
 	proyectile = ProyectileType::Bullet;
 
 	ps = new ParticleSystem(gScene, gPhysics, 30);
+
+	createScene();
 }
 
 

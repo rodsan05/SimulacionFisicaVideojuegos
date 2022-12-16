@@ -4,14 +4,16 @@
 
 using Color = Vector4;
 
+#define NumOfShapes 5;
+
 enum ParticleShape 
-{ Sphere, Cube, Capsule, Plane };
+{ Sphere, Cube, Capsule, Plane, Prism, None };
 
 class Particle
 {
 public:
 	Particle();
-	Particle(Vector3 Pos, Vector3 Vel, Vector3 a_, float damping_, float scale_, Color color_, float lifeTime_, float lifeDist_, float m_ = 0, ParticleShape shape_ = ParticleShape::Sphere);
+	Particle(Vector3 Pos, Vector3 Vel, Vector3 a_, float damping_, float scale_, Color color_, float lifeTime_, float lifeDist_, float m_ = 0, ParticleShape shape_ = ParticleShape::Sphere, Vector3 dimensions_ = Vector3(1));
 	~Particle();
 
 	bool isAlive();
@@ -19,7 +21,7 @@ public:
 
 	virtual void integrate(double t);
 
-	virtual Particle* clone() const;
+	virtual Particle* clone(ParticleShape _shape = None) const;
 
 	virtual void setPos(Vector3 pos);
 	void setVel(Vector3 vel);
@@ -27,15 +29,17 @@ public:
 	void setLifeTime(float time);
 	void setLifeDist(float dist);
 	void setColor(Color c);
-	void setScale(float s);
+	virtual void setScale(float s);
 	void setMass(float m);
+
+	physx::PxShape* createShape(ParticleShape shape_, float scale_, Vector3 dimensions);
 
 	virtual void onDeath() {};
 
 	void deregisterRender();
 
-	void clearForce();
-	void addForce(const Vector3& f);
+	virtual void clearForce();
+	virtual void addForce(const Vector3& f);
 
 	void setAffectedByGravity(bool set) { affectedByGravity = set; }
 	bool isAffectedByGravity() { return affectedByGravity; }
@@ -77,7 +81,9 @@ protected:
 	physx::PxTransform pose;
 	RenderItem* renderItem;
 	ParticleShape shape;
+	physx::PxShape* partShape = nullptr;
 	Color color;
+	Vector3 dimensions;
 
 	Vector3 a;
 	float damping;

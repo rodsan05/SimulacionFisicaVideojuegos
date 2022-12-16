@@ -11,7 +11,7 @@ public:
 	Firework(ParticleSystem* pSys, Vector3 Pos, Vector3 Vel, Vector3 a_, float damping_, float scale_, Color color_, float lifeTime_, float lifeDist_, float m_);
 	~Firework();
 
-	Particle* clone() const override;
+	Particle* clone(ParticleShape _shape = None) const override;
 
 	void onDeath() override;
 

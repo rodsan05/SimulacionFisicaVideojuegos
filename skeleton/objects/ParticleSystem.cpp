@@ -54,9 +54,9 @@ void ParticleSystem::createParticleGenerator(ParticleGenType type)
 		generator->setPerpetual(true);
 		break;
 	case RigidDemo:
-		p = new RigidParticle(_scene, _physics, false, Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0), 0.999f, 2, Color(0.7, 0.9, 0.05, 1), -1, 500, 1);
+		p = new RigidParticle(_scene, _physics, false, Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0), 0.999f, 2, Color(0.7, 0.9, 0.05, 1), 10000, 500, 1, Capsule);
 		p->deregisterRender();
-		generator = new GaussianParticleGenerator({ 0, 100, 0 }, { 0, 0, 0 }, { 100, 5, 100 }, { 0.001f, 0.001f, 0.001f }, 1, 1);
+		generator = new GaussianParticleGenerator({ 0, 20, 0 }, { 0, 0, 0 }, { 10, 10, 10 }, { 0.001f, 0.001f, 0.001f }, 1, 1, true, true, true);
 		generator->setParticle(p);
 		generator->setPerpetual(true);
 		break;

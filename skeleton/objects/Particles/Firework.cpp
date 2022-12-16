@@ -11,7 +11,7 @@ Firework::~Firework()
 {
 }
 
-Particle* Firework::clone() const
+Particle* Firework::clone(ParticleShape _shape) const
 {
 	Firework* f = new Firework(_pSys, pose.p, vel, a, damping, scale, color, lifeTime, lifeDistance, m);
 	

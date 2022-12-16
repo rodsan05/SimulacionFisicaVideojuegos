@@ -273,7 +273,6 @@
     <ClCompile Include="objects\ParticleGenerators\StarParticleGenerator.cpp" />
     <ClCompile Include="objects\ForceGenerators\WindForceGenerator.cpp" />
     <ClCompile Include="objects\ForceGenerators\WhirlwindForceGenerator.cpp" />
-    <ClCompile Include="objects\RigidParticleSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="objects\ForceGenerators\BouyancyForceGenerator.h" />
@@ -286,7 +285,6 @@
     <ClInclude Include="objects\ForceGenerators\ForceGenerator.h" />
     <ClInclude Include="objects\ForceRegistry.hpp" />
     <ClInclude Include="objects\IncludeFiles\ParticleGeneratorsIncludes.h" />
-    <ClInclude Include="objects\IncludeFiles\RigidParticleGeneratorsIncludes.h" />
     <ClInclude Include="objects\ParticleGenerators\RigidParticleGenerator.h" />
     <ClInclude Include="objects\ParticleGenerators\SphereParticleGenerator.h" />
     <ClInclude Include="core.hpp" />
@@ -301,14 +299,12 @@
     <ClInclude Include="objects\Particles\RigidParticle.h" />
     <ClInclude Include="RenderUtils.hpp" />
     <ClInclude Include="Render\Camera.h" />
-    <ClInclude Include="objects\RigidForceRegistry.hpp" />
     <ClInclude Include="Render\Render.h" />
     <ClInclude Include="objects\ParticleGenerators\UniformParticleGenerator.h" />
     <ClInclude Include="objects\ParticleGenerators\StarParticleGenerator.h" />
     <ClInclude Include="objects\ForceGenerators\WindForceGenerator.h" />
     <ClInclude Include="objects\ForceGenerators\WhirlwindForceGenerator.h" />
     <ClInclude Include="objects\ForceGenerators\SpringForceGenerator.h" />
-    <ClInclude Include="objects\RigidParticleSystem.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

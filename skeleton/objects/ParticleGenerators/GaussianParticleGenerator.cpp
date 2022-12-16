@@ -1,7 +1,7 @@
 #include "GaussianParticleGenerator.h"
 
 GaussianParticleGenerator::GaussianParticleGenerator(Vector3 pos, Vector3 vel, Vector3 dev_pos, Vector3 dev_vel, double gen_prob, int num, bool randomMass,
-	Color color, float scale, float lifeTime, float lifeDist, float damping, float m)
+	bool randomColor, bool randomShape, Color color, float scale, float lifeTime, float lifeDist, float damping, float m)
 {
 	_mean_pos = pos;
 	_mean_vel = vel;
@@ -20,6 +20,8 @@ GaussianParticleGenerator::GaussianParticleGenerator(Vector3 pos, Vector3 vel, V
 	_color = color;
 
 	_randomMass = randomMass;
+	_randomColor = randomColor;
+	_randomShape = randomShape;
 }
 
 GaussianParticleGenerator::~GaussianParticleGenerator()
@@ -56,7 +58,17 @@ std::list<Particle*> GaussianParticleGenerator::generateParticles()
 
 			else
 			{
-				p = _model->clone();
+				if (_randomShape)
+				{
+					auto n = NumOfShapes + 1;
+					auto s = rand() % n;
+
+					p = _model->clone(static_cast<ParticleShape>(s));
+				}
+
+				else
+					p = _model->clone();
+	
 				p->setPos(pos + _mean_pos);
 				p->setVel(vel + _mean_vel);
 
@@ -64,8 +76,16 @@ std::list<Particle*> GaussianParticleGenerator::generateParticles()
 				{
 					auto m = rand() % 1000 + 100;
 
-					p->setMass(m / 10.0f);
-					p->setScale(m /500.0f);
+					p->setMass(m / 2000.0f);
+					p->setScale(m / 500.0f);
+				}
+				if (_randomColor)
+				{
+					auto r = (rand() % 101) / 100.0;
+					auto g = (rand() % 101) / 100.0;
+					auto b = (rand() % 101) / 100.0;
+
+					p->setColor(Color(r, g, b, 1.0));
 				}
 			}
 

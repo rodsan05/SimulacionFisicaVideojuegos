@@ -4,7 +4,7 @@ Particle::Particle() : vel(), damping(), a(), pose(), color(), renderItem(), lif
 {
 }
 
-Particle::Particle(Vector3 Pos, Vector3 Vel, Vector3 a_, float damping_, float scale_, Color color_, float lifeTime_, float lifeDist_, float m_, ParticleShape shape_)
+Particle::Particle(Vector3 Pos, Vector3 Vel, Vector3 a_, float damping_, float scale_, Color color_, float lifeTime_, float lifeDist_, float m_, ParticleShape shape_, Vector3 dimensions_)
 {
 	force = Vector3(0);
 
@@ -20,27 +20,9 @@ Particle::Particle(Vector3 Pos, Vector3 Vel, Vector3 a_, float damping_, float s
 
 	shape = shape_;
 
-	auto partShape = CreateShape(physx::PxSphereGeometry(scale_));
+	dimensions = dimensions_;
 
-	switch (shape_)
-	{
-	case Sphere:
-		break;
-	case Cube:
-		partShape = CreateShape(physx::PxBoxGeometry(scale_, scale_, scale_));
-		volume = pow(scale_, 3);
-		break;
-	case Capsule:
-		partShape = CreateShape(physx::PxCapsuleGeometry(scale_ / 4, scale_));
-		volume = (physx::PxPi * pow(scale_ / 4, 2) * scale_ * 2) + ((4 / 3) * physx::PxPi * pow(scale / 4, 3)); //cilinder area + sphere area
-		break;
-	case Plane:
-		partShape = CreateShape(physx::PxBoxGeometry(scale_, 0.5, scale_));
-		volume = pow(scale_, 2) * 0.5;
-		break;
-	default:
-		break;
-	}
+	partShape = createShape(shape, scale, dimensions);
 
 	renderItem = new RenderItem(partShape, &pose, color);
 
@@ -135,9 +117,12 @@ void Particle::integrate(double t)
 	}
 }
 
-Particle* Particle::clone() const
+Particle* Particle::clone(ParticleShape _shape) const
 {
-	return new Particle(pose.p, vel, a, damping, scale, color, lifeTime, lifeDistance, m);
+	if (shape != None)
+		return new Particle(pose.p, vel, a, damping, scale, color, lifeTime, lifeDistance, m, _shape);
+
+	return new Particle(pose.p, vel, a, damping, scale, color, lifeTime, lifeDistance, m, shape);
 }
 
 void Particle::setPos(Vector3 pos_)
@@ -164,19 +149,61 @@ void Particle::setLifeDist(float dist)
 void Particle::setColor(Color c)
 {
 	color = c;
+
+	DeregisterRenderItem(renderItem);
+	delete renderItem;
+	renderItem = new RenderItem(partShape, &pose, color);
 }
 
 void Particle::setScale(float s)
 {
 	scale = s;
 
+	partShape = createShape(shape, scale, dimensions);
+
 	DeregisterRenderItem(renderItem);
-	renderItem = new RenderItem(CreateShape(physx::PxSphereGeometry(scale)), &pose, color);
+	delete renderItem;
+	renderItem = new RenderItem(partShape, &pose, color);
 }
 
 void Particle::setMass(float mass)
 {
 	m = mass;
+}
+
+physx::PxShape* Particle::createShape(ParticleShape shape_, float scale_, Vector3 dimensions)
+{
+	physx::PxShape* partShape_;
+
+	switch (shape_)
+	{
+	case Sphere:
+		partShape_ = CreateShape(physx::PxSphereGeometry(scale_));
+		volume = (4 / 3) * physx::PxPi * pow(scale_, 3);
+		break;
+	case Cube:
+		partShape_ = CreateShape(physx::PxBoxGeometry(scale_, scale_, scale_));
+		volume = pow(scale_, 3);
+		break;
+	case Capsule:
+		partShape_ = CreateShape(physx::PxCapsuleGeometry(scale_ / 2, scale_));
+		volume = (physx::PxPi * pow(scale_ / 2, 2) * scale_ * 2) + ((4 / 3) * physx::PxPi * pow(scale / 2, 3)); //cilinder area + sphere area
+		break;
+	case Plane:
+		partShape_ = CreateShape(physx::PxBoxGeometry(scale_, 0.5, scale_));
+		volume = pow(scale_, 2) * 0.5;
+		break;
+	case Prism:
+		partShape_ = CreateShape(physx::PxBoxGeometry(scale_ * dimensions.x, scale_ * dimensions.y, scale_ * dimensions.z));
+		volume = scale_ * dimensions.x + scale_ * dimensions.y + scale_ * dimensions.z;
+		break;
+	default:
+		partShape_ = CreateShape(physx::PxSphereGeometry(scale_));
+		volume = (4 / 3) * physx::PxPi * pow(scale_, 3);
+		break;
+	}
+
+	return partShape_;
 }
 
 void Particle::deregisterRender()
