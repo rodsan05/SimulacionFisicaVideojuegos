@@ -32,6 +32,8 @@
 #include "Camera.h"
 #include <ctype.h>
 #include "foundation/PxMat33.h"
+#include <glut.h>
+#include <windows.h>
 
 using namespace physx;
 
@@ -60,12 +62,14 @@ bool Camera::handleKey(unsigned char key, int x, int y, float speed)
 	PX_UNUSED(y);
 
 	PxVec3 viewY = mDir.cross(PxVec3(0,1,0)).getNormalized();
+	PxVec3 viewX = -viewY.cross(PxVec3(0, 1, 0)).getNormalized();
+
 	switch(toupper(key))
 	{
-	case 'W':	mEye += mDir*2.0f*speed;		break;
-	case 'S':	mEye -= mDir*2.0f*speed;		break;
+	/*case 'W':	mEye += viewX*2.0f*speed;		break;
+	case 'S':	mEye -= viewX*2.0f*speed;		break;
 	case 'A':	mEye -= viewY*2.0f*speed;		break;
-	case 'D':	mEye += viewY*2.0f*speed;		break;
+	case 'D':	mEye += viewY*2.0f*speed;		break;*/
 	default:							return false;
 	}
 	return true;
@@ -80,8 +84,11 @@ void Camera::handleAnalogMove(float x, float y)
 
 void Camera::handleMotion(int x, int y)
 {
-	int dx = mMouseX - x;
-	int dy = mMouseY - y;
+	int screenWidth = GetSystemMetrics(SM_CXSCREEN);
+	int screenHeight = GetSystemMetrics(SM_CYSCREEN);
+	
+	int dx = screenWidth / 4 - x;
+	int dy = screenHeight / 4 - y;
 
 	PxVec3 viewY = mDir.cross(PxVec3(0,1,0)).getNormalized();
 
@@ -92,8 +99,7 @@ void Camera::handleMotion(int x, int y)
 
 	mDir.normalize();
 
-	mMouseX = x;
-	mMouseY = y;
+	glutWarpPointer(screenWidth / 4, screenHeight / 4);
 }
 
 PxTransform Camera::getTransform() const
@@ -107,9 +113,20 @@ PxTransform Camera::getTransform() const
 	return PxTransform(mEye, PxQuat(m));
 }
 
+void Camera::setMousePos(int x, int y)
+{
+	mMouseX = x;
+	mMouseY = y;
+}
+
 PxVec3 Camera::getEye() const
 { 
 	return mEye; 
+}
+
+void Camera::setEye(physx::PxVec3 vec)
+{
+	mEye = vec;
 }
 
 PxVec3 Camera::getDir() const

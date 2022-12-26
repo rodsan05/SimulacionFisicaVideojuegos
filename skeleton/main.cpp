@@ -9,10 +9,11 @@
 #include "callbacks.hpp"
 
 #include "objects/Particles/Particle.h"
-#include "objects/Particles/Proyectile.h"
 #include "objects/ParticleSystem.h"
 
 #include <iostream>
+#include "objects/MyCharacterController.h"
+#include "objects/BulletSystem.h"
 
 
 
@@ -32,28 +33,24 @@ PxPvd* gPvd = NULL;
 PxCudaContextManager* gCudaContextManager;
 PxDefaultCpuDispatcher* gDispatcher = NULL;
 PxScene* gScene = NULL;
+PxControllerManager* manager = nullptr;
 ContactReportCallback gContactReportCallback;
 
 ProyectileType proyectile;
 
 std::vector<Particle*> particles;
 ParticleSystem* ps;
+BulletSystem* bs;
+MyCharacterController* characterControl;
+
+bool keys[256];  // array to track the state of each key
 
 void createScene()
 {
 	auto floor = new RigidParticle(gScene, gPhysics, true, Vector3(0, -5, 0), Vector3(0), Vector3(0), 0, 40, Color(0.9, 0.9, 0.9, 1), -1, -1, 0, Plane);
 	particles.push_back(floor);
 
-	auto block = new RigidParticle(gScene, gPhysics, true, Vector3(4, -5 + 10, 16), Vector3(0), Vector3(0), 0, 10, Color(0.9, 0, 0.8, 1), -1, -1, 0, Prism, Vector3(0.5, 1, 0.5));
-	particles.push_back(block);
-
-	block = new RigidParticle(gScene, gPhysics, true, Vector3(17, -5 + 4, 5), Vector3(0), Vector3(0), 0, 4, Color(0, 0.8, 0.9, 1), -1, -1, 0, Prism, Vector3(0.75, 1, 0.25));
-	particles.push_back(block);
-
-	block = new RigidParticle(gScene, gPhysics, true, Vector3(-12, -5 + 8, -7), Vector3(0), Vector3(0), 0, 8, Color(0.9, 0.8, 0, 1), -1, -1, 0, Prism, Vector3(0.65, 1, 0.35));
-	particles.push_back(block);
-
-	block = new RigidParticle(gScene, gPhysics, true, Vector3(-40 - 4, -5 + 5, 0), Vector3(0), Vector3(0), 0, 40, Color(0.9, 0.9, 0.9, 1), -1, -1, 0, Prism, Vector3(0.1, 0.2, 1));
+	auto block = new RigidParticle(gScene, gPhysics, true, Vector3(-40 - 4, -5 + 5, 0), Vector3(0), Vector3(0), 0, 40, Color(0.9, 0.9, 0.9, 1), -1, -1, 0, Prism, Vector3(0.1, 0.2, 1));
 	particles.push_back(block);
 
 	block = new RigidParticle(gScene, gPhysics, true, Vector3(40 + 4, -5 + 5, 0), Vector3(0), Vector3(0), 0, 40, Color(0.9, 0.9, 0.9, 1), -1, -1, 0, Prism, Vector3(0.1, 0.2, 1));
@@ -64,6 +61,15 @@ void createScene()
 
 	block = new RigidParticle(gScene, gPhysics, true, Vector3(0, -5 + 5, 40 + 4), Vector3(0), Vector3(0), 0, 40, Color(0.9, 0.9, 0.9, 1), -1, -1, 0, Prism, Vector3(1.2, 0.2, 0.1));
 	particles.push_back(block);
+
+	/*block = new RigidParticle(gScene, gPhysics, true, Vector3(4, -5 + 10, 16), Vector3(0), Vector3(0), 0, 10, Color(0.9, 0, 0.8, 1), -1, -1, 0, Prism, Vector3(0.5, 1, 0.5));
+	particles.push_back(block);
+
+	block = new RigidParticle(gScene, gPhysics, true, Vector3(17, -5 + 4, 5), Vector3(0), Vector3(0), 0, 4, Color(0, 0.8, 0.9, 1), -1, -1, 0, Prism, Vector3(0.75, 1, 0.25));
+	particles.push_back(block);
+
+	block = new RigidParticle(gScene, gPhysics, true, Vector3(-12, -5 + 8, -7), Vector3(0), Vector3(0), 0, 8, Color(0.9, 0.8, 0, 1), -1, -1, 0, Prism, Vector3(0.65, 1, 0.35));
+	particles.push_back(block);*/
 }
 
 // Initialize physics engine
@@ -87,7 +93,7 @@ void initPhysics(bool interactive)
 	//gCudaContextManager = PxCreateCudaContextManager(*gFoundation, cudaContextManagerDesc);
 
 	PxSceneDesc sceneDesc(gPhysics->getTolerancesScale());
-	sceneDesc.gravity = PxVec3(0.0f, -9.8f, 0.0f);
+	//sceneDesc.gravity = PxVec3(0.0f, -9.8f, 0.0f);
 	gDispatcher = PxDefaultCpuDispatcherCreate(4);
 	sceneDesc.cpuDispatcher = gDispatcher;
 	sceneDesc.filterShader = contactReportFilterShader;
@@ -99,13 +105,85 @@ void initPhysics(bool interactive)
 	gScene = gPhysics->createScene(sceneDesc);
 	gScene->setFlag(PxSceneFlag::eENABLE_ACTIVE_ACTORS, true);
 
-	proyectile = ProyectileType::Bullet;
+	manager = PxCreateControllerManager(*gScene);
 
+	characterControl = new MyCharacterController(manager, GetCamera(), Vector3(0, 10, 0), Vector3(0, -10, 0), 5, 50000, gPhysics->createMaterial(0.5f, 0.5f, 0.5f));
 	ps = new ParticleSystem(gScene, gPhysics, 30);
+	bs = new BulletSystem(gScene, gPhysics);
 
 	createScene();
 }
 
+void handleKeyboard()
+{
+	Camera* cam = GetCamera();
+
+	if (keys['q'])
+		ps->clearAllGenerators();
+	else if (keys['b'])
+		bs->shoot(Bullet);
+	else if (keys['1'])
+		ps->createParticleGenerator(Hormigas);
+	else if (keys['2'])
+		ps->createParticleGenerator(Cubo);
+	else if (keys['3'])
+		ps->createParticleGenerator(Sangre);
+	else if (keys['4'])
+		ps->createParticleGenerator(Humo);
+	else if (keys['5'])
+		ps->createParticleGenerator(RandomMass);
+	else if (keys['6'])
+		ps->createParticleGenerator(RigidDemo);
+	else if (keys['c'])
+		ps->generateFireworksSystem(Circle);
+	else if (keys['e'])
+		ps->generateFireworksSystem(SphereFirework);
+	else if (keys['x'])
+		ps->generateFireworksSystem(Star);
+	else if (keys['g'])
+		ps->generate();
+	else if (keys['u'])
+		ps->generateGravity();
+	else if (keys['j'])
+		ps->generateReverseGravity();
+	else if (keys['i'])
+		ps->generateWind();
+	else if (keys['o'])
+		ps->generateWhirlwind();
+	else if (keys['p'])
+		ps->generateExplosion();
+	else if (keys['y'])
+		ps->clearForces();
+	else if (keys['m'])
+		ps->killAllParticles();
+	else if (keys['h'])
+		ps->generateSpringDemo();
+	else if (keys['f'])
+		ps->generateFloatingDemo();
+	else if (keys['z'])
+		ps->generateSlinky();
+	else if (keys['r'])
+		ps->generateRopeDemo();
+	else if (keys['+'])
+		ps->incrementAllSprings(1);
+	else if (keys['-'])
+		ps->decrementAllSprings(1);
+
+	if (keys['w'])
+		characterControl->setInputDirX(1);
+
+	else if (keys['s'])
+		characterControl->setInputDirX(-1);
+
+	if (keys['a'])
+		characterControl->setInputDirY(-1);
+
+	else if (keys['d'])
+		characterControl->setInputDirY(1);
+
+	if (keys[' '])
+		characterControl->jump();
+}
 
 // Function to configure what happens in each step of physics
 // interactive: true if the game is rendering, false if it offline
@@ -113,6 +191,8 @@ void initPhysics(bool interactive)
 void stepPhysics(bool interactive, double t)
 {
 	PX_UNUSED(interactive);
+
+	handleKeyboard();
 
 	gScene->simulate(t);
 	gScene->fetchResults(true);
@@ -132,6 +212,11 @@ void stepPhysics(bool interactive, double t)
 	}
 
 	ps->update(t);
+	bs->update(t);
+
+	if (characterControl->isJumping())
+		characterControl->addForce(Vector3(0, -100, 0));
+	characterControl->integrate(t);
 }
 
 // Function to clean data
@@ -160,95 +245,19 @@ void keyPress(unsigned char key, const PxTransform& camera)
 {
 	PX_UNUSED(camera);
 
-	Camera* cam = GetCamera();
+	keys[tolower(key)] = true;
+}
 
-	switch (toupper(key))
+void keyRelease(unsigned char key)
+{
+	keys[tolower(key)] = false;
+}
+
+void mousePress(int button, int state, int x, int y)
+{
+	if (button == 0 && state == 1) 
 	{
-	case 'Q':
-		ps->clearAllGenerators();
-		break;
-	case 'B':
-		particles.push_back(new Proyectile(proyectile, cam->getTransform().p + cam->getDir() * 5, cam->getDir()));
-		break;
-	case '1':
-		//proyectile = Bullet;
-		ps->createParticleGenerator(Hormigas);
-		break;
-	case '2':
-		//proyectile = CannonBall;
-		ps->createParticleGenerator(Cubo);
-		break;
-	case '3':
-		//proyectile = Laser;
-		ps->createParticleGenerator(Sangre);
-		break;
-	case '4':
-		//proyectile = Misile;
-		ps->createParticleGenerator(Humo);
-		break;
-	case '5':
-		//proyectile = Misile;
-		ps->createParticleGenerator(RandomMass);
-		break;
-	case '6':
-		//proyectile = Misile;
-		ps->createParticleGenerator(RigidDemo);
-		break;
-	case 'C':
-		ps->generateFireworksSystem(Circle);
-		break;
-	case 'E':
-		ps->generateFireworksSystem(SphereFirework);
-		break;
-	case 'X':
-		ps->generateFireworksSystem(Star);
-		break;
-	case 'G':
-		ps->generate();
-		break;
-	case 'U':
-		ps->generateGravity();
-		break;
-	case 'J':
-		ps->generateReverseGravity();
-		break;
-	case 'I':
-		ps->generateWind();
-		break;
-	case 'O':
-		ps->generateWhirlwind();
-		break;
-	case 'P':
-		ps->generateExplosion();
-		break;
-	case 'Y':
-		ps->clearForces();
-		break;
-	case 'M':
-		ps->killAllParticles();
-		break;
-	case 'H':
-		ps->generateSpringDemo();
-		break;
-	case 'F':
-		ps->generateFloatingDemo();
-		break;
-	case 'Z':
-		ps->generateSlinky();
-		break;
-	case 'R':
-		ps->generateRopeDemo();
-		break;
-	case '+':
-		ps->incrementAllSprings(1);
-	case '-':
-		ps->decrementAllSprings(1);
-	case ' ':
-	{
-		break;
-	}
-	default:
-		break;
+		bs->shoot(Bullet);
 	}
 }
 
@@ -261,6 +270,7 @@ void onCollision(physx::PxActor* actor1, physx::PxActor* actor2)
 
 int main(int, const char* const*)
 {
+	ShowCursor(FALSE);
 #ifndef OFFLINE_EXECUTION 
 	extern void renderLoop();
 	renderLoop();

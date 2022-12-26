@@ -29,6 +29,7 @@
 
 #include "Render.h"
 #include <assert.h>
+#include <iostream>
 
 using namespace physx;
 
@@ -249,7 +250,28 @@ void setupDefaultWindow(const char *name)
 
 	glutInit(&argc, argv);
 	
-	glutInitWindowSize(512, 512);
+	std::cout << "Resolucion:\n 1. 720p\n 2. 1080p\n\n";
+
+	int n = 0;
+
+	while (n != 1 && n != 2) 
+	{
+		std::cin >> n;
+	}
+
+	switch (n)
+	{
+	case 1:
+		glutInitWindowSize(1280, 720);
+		break;
+	case 2:
+		glutInitWindowSize(1920, 1080);
+		break;
+	default:
+		glutInitWindowSize(512, 512);
+		break;
+	}
+
 	glutInitDisplayMode(GLUT_RGB|GLUT_DOUBLE|GLUT_DEPTH);
 	int mainHandle = glutCreateWindow(name);
 	glutSetWindow(mainHandle);

@@ -2,6 +2,7 @@
 #include "Particle.h"
 #include "../../core.hpp"
 #include "../../RenderUtils.hpp"
+#include <functional>
 
 using Color = Vector4;
 
@@ -11,6 +12,45 @@ public:
 	//default constructor cant exist, minimum is scene and physics
 	RigidParticle(physx::PxScene* scene_, physx::PxPhysics* physics_)
 	{
+		scene = scene_;
+		physics = physics_;
+
+		_static = false;
+		force = Vector3(0);
+		a = Vector3(0);
+		vel = Vector3(0);
+		pose = physx::PxTransform(Vector3(0));
+		scale = 1;
+
+		damping = 0.999f;
+		color = Color(1);
+		m = 1;
+		lifeTime = -1;
+		lifeDistance = -1;
+		initPos = Vector3(0);
+		iniTime = glutGet(GLUT_ELAPSED_TIME);
+
+		shape = Sphere;
+		dimensions = Vector3(1);
+
+		partShape = createShape(shape, scale, dimensions);
+
+		rb = physics->createRigidDynamic(pose);
+
+		rb->setLinearVelocity(vel);
+		rb->setLinearDamping(damping);
+
+		physx::PxRigidBodyExt::updateMassAndInertia(*rb, m / volume, NULL);
+
+		rb->userData = this; //reference to this object used later to update transforms
+
+		rb->attachShape(*partShape);
+
+		scene->addActor(*rb);
+
+		renderItem = new RenderItem(partShape, rb, color);
+
+		collisionCallback = std::function<void()>{};
 	}
 
 	//constructor
@@ -160,6 +200,16 @@ public:
 		}
 	}
 
+	void onCollisionCallback() 
+	{
+		collisionCallback();
+	}
+
+	void setCollisionCallback(std::function<void()> callback)
+	{
+		collisionCallback = callback;
+	}
+
 protected:
 
 	void setParticle(Vector3 Pos, Vector3 Vel, Vector3 a_, float damping_, float scale_, Color color, float lifeTime_, float lifeDist_, float m_ = 0);
@@ -169,5 +219,7 @@ protected:
 	physx::PxPhysics* physics = nullptr;
 
 	physx::PxRigidDynamic* rb = nullptr;
+
+	std::function<void()> collisionCallback;
 };
 

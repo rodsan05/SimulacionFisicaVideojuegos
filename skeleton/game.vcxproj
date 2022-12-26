@@ -253,6 +253,8 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="objects\BulletSystem.cpp" />
+    <ClCompile Include="objects\MyCharacterController.cpp" />
     <ClCompile Include="objects\ForceGenerators\BouyancyForceGenerator.cpp" />
     <ClCompile Include="objects\ForceGenerators\AnchoredSpringFG.cpp" />
     <ClCompile Include="callbacks.cpp" />
@@ -275,6 +277,8 @@
     <ClCompile Include="objects\ForceGenerators\WhirlwindForceGenerator.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="objects\BulletSystem.h" />
+    <ClInclude Include="objects\MyCharacterController.h" />
     <ClInclude Include="objects\ForceGenerators\BouyancyForceGenerator.h" />
     <ClInclude Include="objects\ForceGenerators\AnchoredSpringFG.h" />
     <ClInclude Include="callbacks.hpp" />
@@ -297,6 +301,7 @@
     <ClInclude Include="objects\ParticleSystem.h" />
     <ClInclude Include="objects\Constraints\ParticleLink.h" />
     <ClInclude Include="objects\Particles\RigidParticle.h" />
+    <ClInclude Include="objects\Particles\RigidProyectile.h" />
     <ClInclude Include="RenderUtils.hpp" />
     <ClInclude Include="Render\Camera.h" />
     <ClInclude Include="Render\Render.h" />

@@ -25,6 +25,8 @@
     <ClCompile Include="objects\ForceGenerators\ExplosionForceGenerator.cpp" />
     <ClCompile Include="objects\ForceGenerators\AnchoredSpringFG.cpp" />
     <ClCompile Include="objects\ForceGenerators\BouyancyForceGenerator.cpp" />
+    <ClCompile Include="objects\MyCharacterController.cpp" />
+    <ClCompile Include="objects\BulletSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core.hpp" />
@@ -61,6 +63,9 @@
     <ClInclude Include="objects\Constraints\ParticleLink.h" />
     <ClInclude Include="objects\Particles\RigidParticle.h" />
     <ClInclude Include="objects\ParticleGenerators\RigidParticleGenerator.h" />
+    <ClInclude Include="objects\MyCharacterController.h" />
+    <ClInclude Include="objects\Particles\RigidProyectile.h" />
+    <ClInclude Include="objects\BulletSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Render">
