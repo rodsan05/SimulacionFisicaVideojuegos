@@ -9,10 +9,12 @@
 #include "callbacks.hpp"
 
 #include "objects/Particles/Particle.h"
+#include "objects/Particles/Enemy.h"
 #include "objects/ParticleSystem.h"
 
 #include <iostream>
 #include "objects/MyCharacterController.h"
+#include "objects/MySimulationEventCallback.h"
 #include "objects/BulletSystem.h"
 
 
@@ -42,6 +44,9 @@ std::vector<Particle*> particles;
 ParticleSystem* ps;
 BulletSystem* bs;
 MyCharacterController* characterControl;
+ForceRegistry* forceRegistry;
+
+std::vector<EnemyClass*> enemies;
 
 bool keys[256];  // array to track the state of each key
 
@@ -61,6 +66,16 @@ void createScene()
 
 	block = new RigidParticle(gScene, gPhysics, true, Vector3(0, -5 + 5, 40 + 4), Vector3(0), Vector3(0), 0, 40, Color(0.9, 0.9, 0.9, 1), -1, -1, 0, Prism, Vector3(1.2, 0.2, 0.1));
 	particles.push_back(block);
+
+	auto enemy = new EnemyClass(gScene, gPhysics, characterControl, Vector3(20, -1, 20), 2, 2, ps);
+	enemy->setType(Enemy);
+	enemies.push_back(enemy);
+
+	std::function<void(Particle*)> callback = [enemy](Particle* other) {
+		if (other->getType() == Proyectile)
+			enemy->setAlive(false);
+	};
+	enemy->setCollisionCallback(callback);
 
 	/*block = new RigidParticle(gScene, gPhysics, true, Vector3(4, -5 + 10, 16), Vector3(0), Vector3(0), 0, 10, Color(0.9, 0, 0.8, 1), -1, -1, 0, Prism, Vector3(0.5, 1, 0.5));
 	particles.push_back(block);
@@ -107,9 +122,15 @@ void initPhysics(bool interactive)
 
 	manager = PxCreateControllerManager(*gScene);
 
-	characterControl = new MyCharacterController(manager, GetCamera(), Vector3(0, 10, 0), Vector3(0, -10, 0), 5, 50000, gPhysics->createMaterial(0.5f, 0.5f, 0.5f));
+	MySimulationEventCallback* callback = new MySimulationEventCallback();
+	gScene->setSimulationEventCallback(callback);
+
+	characterControl = new MyCharacterController(manager, GetCamera(), Vector3(0, 10, 0), Vector3(0, -10, 0), 5, 10000, gPhysics->createMaterial(0.5f, 0.5f, 0.5f));
 	ps = new ParticleSystem(gScene, gPhysics, 30);
+	ps->generateGravity();
 	bs = new BulletSystem(gScene, gPhysics);
+
+	forceRegistry = new ForceRegistry();
 
 	createScene();
 }
@@ -197,6 +218,20 @@ void stepPhysics(bool interactive, double t)
 	gScene->simulate(t);
 	gScene->fetchResults(true);
 
+	for (int i = 0; i < enemies.size(); i++)
+	{
+		auto e = enemies[i];
+
+		if (e->isAlive())
+			e->integrate(t);
+
+		else
+		{
+			delete e;
+			enemies.erase(enemies.begin() + i);
+		}
+	}
+
 	for (int i = 0; i < particles.size(); i++)
 	{
 		auto p = particles[i];
@@ -226,6 +261,12 @@ void cleanupPhysics(bool interactive)
 	PX_UNUSED(interactive);
 
 	// Rigid Body ++++++++++++++++++++++++++++++++++++++++++
+	for (auto p : particles)
+		delete p;
+	delete ps;
+	delete bs;
+	delete forceRegistry;
+
 	gScene->release();
 	gDispatcher->release();
 	// -----------------------------------------------------
@@ -235,9 +276,6 @@ void cleanupPhysics(bool interactive)
 	transport->release();
 
 	gFoundation->release();
-
-	for (auto p : particles)
-		delete p;
 }
 
 // Function called when a key is pressed

@@ -34,6 +34,8 @@ public:
 		desc.material = material;
 		desc.maxJumpHeight = 20;
 		_controller = manager->createController(desc);
+
+		_type = Player;
 	}
 
 	~MyCharacterController() 
@@ -43,6 +45,9 @@ public:
 	void integrate(double t) override
 	{
 		if (_static) return;
+
+		auto p = _controller->getPosition();
+		pose.p = Vector3(p.x, p.y, p.z);
 
 		Vector3 dir = Vector3(0);
 

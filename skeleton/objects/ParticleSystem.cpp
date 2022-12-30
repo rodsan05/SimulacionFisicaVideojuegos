@@ -10,6 +10,24 @@ _explosion_gen(nullptr), _reverse_gravity_gen(nullptr), _scene(scene), _physics(
 
 ParticleSystem::~ParticleSystem()
 {
+	for (auto p : _particles) 
+		delete p;
+
+	for (auto p : _firework_pool)
+		delete p;
+
+	for (auto f : _force_generators)
+		delete f;
+
+	for (auto f : _spring_generators)
+		delete f;
+
+	for (auto l : _particle_links)
+		delete l;
+	
+	clearForces();
+
+	delete _force_registry;
 }
 
 void ParticleSystem::createParticleGenerator(ParticleGenType type)
@@ -127,21 +145,6 @@ void ParticleSystem::generate()
 		{
 			auto list = g->generateParticles();
 
-			for (auto p : list)
-			{
-				if (_gravity_gen != nullptr)
-					_force_registry->addRegistry(_gravity_gen, p);
-
-				if (_reverse_gravity_gen != nullptr)
-					_force_registry->addRegistry(_reverse_gravity_gen, p);
-
-				if (_wind_gen != nullptr)
-					_force_registry->addRegistry(_wind_gen, p);
-
-				if (_whirlwind_gen != nullptr)
-					_force_registry->addRegistry(_whirlwind_gen, p);
-			}
-
 			appendParticles(list);
 		}
 	}
@@ -156,21 +159,6 @@ void ParticleSystem::generatePerpetual()
 			if (g->isPerpetual())
 			{
 				auto list = g->generateParticles();
-
-				for (auto p : list)
-				{
-					if (_gravity_gen != nullptr && p->isAffectedByGravity())
-						_force_registry->addRegistry(_gravity_gen, p);
-
-					if (_reverse_gravity_gen != nullptr)
-						_force_registry->addRegistry(_reverse_gravity_gen, p);
-
-					if (_wind_gen != nullptr)
-						_force_registry->addRegistry(_wind_gen, p);
-
-					if (_whirlwind_gen != nullptr)
-						_force_registry->addRegistry(_whirlwind_gen, p);
-				}
 
 				appendParticles(list);
 			}
@@ -221,6 +209,21 @@ void ParticleSystem::generateFireworksSystem(FireworkType ft)
 }
 void ParticleSystem::appendParticles(std::list<Particle*> particles)
 {
+	for (auto p : particles)
+	{
+		if (_gravity_gen != nullptr && p->isAffectedByGravity())
+			_force_registry->addRegistry(_gravity_gen, p);
+
+		if (_reverse_gravity_gen != nullptr)
+			_force_registry->addRegistry(_reverse_gravity_gen, p);
+
+		if (_wind_gen != nullptr)
+			_force_registry->addRegistry(_wind_gen, p);
+
+		if (_whirlwind_gen != nullptr)
+			_force_registry->addRegistry(_whirlwind_gen, p);
+	}
+
 	_particles.insert(_particles.end(), particles.begin(), particles.end());
 }
 
@@ -249,7 +252,7 @@ void ParticleSystem::generateGravity()
 {
 	if (_gravity_gen == nullptr)
 	{
-		_gravity_gen = new GravityForceGenerator(Vector3(0, -10, 0));
+		_gravity_gen = new GravityForceGenerator(Vector3(0, -20, 0));
 
 		for (auto p : _particles)
 		{

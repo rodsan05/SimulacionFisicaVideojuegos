@@ -14,7 +14,7 @@ class BulletSystem
 {
 public:
 	BulletSystem(physx::PxScene* scene, physx::PxPhysics* physics);
-	~BulletSystem();
+	virtual ~BulletSystem();
 
 	void update(double t);
 	void shoot(ProyectileType ammo);

@@ -6,6 +6,9 @@ using Color = Vector4;
 
 #define NumOfShapes 5;
 
+enum ParticleType
+{ Default, Enemy, Proyectile, Player };
+
 enum ParticleShape 
 { Sphere, Cube, Capsule, Plane, Prism, None };
 
@@ -14,7 +17,7 @@ class Particle
 public:
 	Particle();
 	Particle(Vector3 Pos, Vector3 Vel, Vector3 a_, float damping_, float scale_, Color color_, float lifeTime_, float lifeDist_, float m_ = 0, ParticleShape shape_ = ParticleShape::Sphere, Vector3 dimensions_ = Vector3(1));
-	~Particle();
+	virtual ~Particle();
 
 	bool isAlive();
 	void setAlive(bool set);
@@ -47,6 +50,16 @@ public:
 	float getMass() { return m; };
 	Vector3 getVel() { return vel; };
 	Vector3 getPos() { return pose.p; };
+
+	void setType(ParticleType t)
+	{
+		_type = t;
+	}
+
+	ParticleType getType()
+	{
+		return _type;
+	}
 
 	float getHeight() 
 	{
@@ -104,5 +117,7 @@ protected:
 	bool affectedByGravity = true;
 	bool eulerSemiImplicito = true;
 	bool _static = false;
+
+	ParticleType _type;
 };
 

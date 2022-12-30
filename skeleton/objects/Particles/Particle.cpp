@@ -1,6 +1,6 @@
 #include "Particle.h"
 
-Particle::Particle() : vel(), damping(), a(), pose(), color(), renderItem(), lifeTime(), m(), scale(), iniTime(), lifeDistance()
+Particle::Particle() : vel(), damping(), a(), pose(), color(), renderItem(), lifeTime(), m(), scale(), iniTime(), lifeDistance(), _type(Default)
 {
 }
 
@@ -33,6 +33,8 @@ Particle::Particle(Vector3 Pos, Vector3 Vel, Vector3 a_, float damping_, float s
 
 	initPos = Pos;
 	iniTime = glutGet(GLUT_ELAPSED_TIME);
+
+	_type = Default;
 }
 
 Particle::~Particle()

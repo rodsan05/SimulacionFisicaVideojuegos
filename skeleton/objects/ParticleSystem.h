@@ -17,7 +17,7 @@ class ParticleSystem
 {
 public:
 	ParticleSystem(physx::PxScene* scene, physx::PxPhysics* physics, int maxParticles = 1000);
-	~ParticleSystem();
+	virtual ~ParticleSystem();
 
 	void createParticleGenerator(ParticleGenType type);
 

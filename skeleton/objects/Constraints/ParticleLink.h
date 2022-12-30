@@ -10,7 +10,9 @@ public:
 	ParticleLink(Particle* p1, Particle* p2, float max_length, float restitution_coef = 0) : _restitution_coef(restitution_coef), _max_length(max_length), particles(p1, p2)
 	{
 	}
-	~ParticleLink();
+	~ParticleLink() 
+	{
+	}
 
 	void setRestitution(float rest_coef) 
 	{

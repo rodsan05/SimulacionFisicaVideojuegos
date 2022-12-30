@@ -253,8 +253,8 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="objects\Particles\Enemy.cpp" />
     <ClCompile Include="objects\BulletSystem.cpp" />
-    <ClCompile Include="objects\MyCharacterController.cpp" />
     <ClCompile Include="objects\ForceGenerators\BouyancyForceGenerator.cpp" />
     <ClCompile Include="objects\ForceGenerators\AnchoredSpringFG.cpp" />
     <ClCompile Include="callbacks.cpp" />
@@ -277,6 +277,8 @@
     <ClCompile Include="objects\ForceGenerators\WhirlwindForceGenerator.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="objects\MySimulationEventCallback.h" />
+    <ClInclude Include="objects\Particles\Enemy.h" />
     <ClInclude Include="objects\BulletSystem.h" />
     <ClInclude Include="objects\MyCharacterController.h" />
     <ClInclude Include="objects\ForceGenerators\BouyancyForceGenerator.h" />

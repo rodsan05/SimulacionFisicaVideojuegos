@@ -7,6 +7,13 @@ BulletSystem::BulletSystem(physx::PxScene* scene, physx::PxPhysics* physics) : _
 
 BulletSystem::~BulletSystem()
 {
+	for (auto f : _force_generators)
+		delete f;
+
+	for (auto p : _particles)
+		delete p;
+
+	delete _force_registry;
 }
 
 void BulletSystem::update(double t)
@@ -107,8 +114,9 @@ void BulletSystem::shoot(ProyectileType ammo)
 	
 	auto cam = GetCamera();
 	auto p = new RigidParticle(_scene, _physics, false, cam->getEye() + cam->getDir().getNormalized(), cam->getDir().getNormalized() * speed, Vector3(0), damping, scale, color, lifeTime, -1, m, shape);
-	
-	std::function<void()> callback = [p](){
+	p->setType(Proyectile);
+
+	std::function<void(Particle*)> callback = [p](Particle* other){
 		p->setAlive(false);
 	};
 	p->setCollisionCallback(callback);

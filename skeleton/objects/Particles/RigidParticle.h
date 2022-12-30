@@ -50,7 +50,7 @@ public:
 
 		renderItem = new RenderItem(partShape, rb, color);
 
-		collisionCallback = std::function<void()>{};
+		collisionCallback = [](Particle* other) { return; };
 	}
 
 	//constructor
@@ -101,6 +101,8 @@ public:
 		{
 			rb = physics->createRigidDynamic(pose);
 
+			rb->setGlobalPose(pose);
+
 			rb->setLinearVelocity(vel);
 			rb->setLinearDamping(damping);
 
@@ -114,8 +116,20 @@ public:
 
 			renderItem = new RenderItem(partShape, rb, color);
 		}
+
+		collisionCallback = [](Particle* other) {};
 	}
-	~RigidParticle();
+	virtual ~RigidParticle() 
+	{
+		if (_static)
+		{
+			scene->removeActor(*rAct);
+		}
+		else
+		{
+			scene->removeActor(*rb);
+		}
+	}
 
 	void integrate(double t) override 
 	{
@@ -154,7 +168,7 @@ public:
 
 	virtual RigidParticle* clone(ParticleShape _shape = None) const override 
 	{
-		if (shape != None)
+		if (_shape != None)
 			return new RigidParticle(scene, physics, _static, pose.p, vel, a, damping, scale, color, lifeTime, lifeDistance, m, _shape);
 
 		return new RigidParticle(scene, physics, _static, pose.p, vel, a, damping, scale, color, lifeTime, lifeDistance, m, shape);
@@ -200,12 +214,12 @@ public:
 		}
 	}
 
-	void onCollisionCallback() 
+	void onCollisionCallback(Particle* other) 
 	{
-		collisionCallback();
+		collisionCallback(other);
 	}
 
-	void setCollisionCallback(std::function<void()> callback)
+	void setCollisionCallback(std::function<void(Particle*)> callback)
 	{
 		collisionCallback = callback;
 	}
@@ -220,6 +234,6 @@ protected:
 
 	physx::PxRigidDynamic* rb = nullptr;
 
-	std::function<void()> collisionCallback;
+	std::function<void(Particle*)> collisionCallback;
 };
 
