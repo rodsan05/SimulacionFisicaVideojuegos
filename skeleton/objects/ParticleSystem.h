@@ -30,6 +30,7 @@ public:
 	void generateFireworksSystem(FireworkType ft);
 
 	void appendParticles(std::list<Particle*> particles);
+	void appendParticlesWithGravity(std::list<Particle*> particles, float g);
 	void appendFireworks(std::list<Particle*> particles);
 
 	void generateGravity();

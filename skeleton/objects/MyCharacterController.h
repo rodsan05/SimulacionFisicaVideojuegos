@@ -89,12 +89,12 @@ public:
 
 		_inputDir = Vector3(0);
 
-		if (flags == PxControllerCollisionFlag::eCOLLISION_DOWN)
+		/*if (flags == PxControllerCollisionFlag::eCOLLISION_DOWN)
 		{
 			_jumping = false;
 
 			if (vel.y < 0) vel.y = 0;
-		}
+		}*/
 	}
 
 	void setGravity(Vector3 g) 

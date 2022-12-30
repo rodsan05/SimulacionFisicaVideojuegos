@@ -54,7 +54,7 @@ std::list<Particle*> GaussianParticleGenerator::generateParticles()
 
 			Particle* p; 
 			
-			if (_model == nullptr) p = new Particle(pos + _mean_pos, vel + _mean_vel, Vector3(0, -10.0f, 0), _damping, _scale, _color, _lifeTime, _lifeDist, _m);
+			if (_model == nullptr) p = new Particle(pos, vel , Vector3(0, -10.0f, 0), _damping, _scale, _color, _lifeTime, _lifeDist, _m);
 
 			else
 			{
@@ -69,8 +69,8 @@ std::list<Particle*> GaussianParticleGenerator::generateParticles()
 				else
 					p = _model->clone();
 	
-				p->setPos(pos + _mean_pos);
-				p->setVel(vel + _mean_vel);
+				p->setPos(pos);
+				p->setVel(vel);
 
 				if (_randomMass)
 				{

@@ -227,6 +227,18 @@ void ParticleSystem::appendParticles(std::list<Particle*> particles)
 	_particles.insert(_particles.end(), particles.begin(), particles.end());
 }
 
+void ParticleSystem::appendParticlesWithGravity(std::list<Particle*> particles, float g)
+{
+	auto gravGen = new GravityForceGenerator(Vector3(0, g, 0));
+
+	for (auto p : particles)
+	{
+		_force_registry->addRegistry(gravGen, p);
+	}
+
+	_particles.insert(_particles.end(), particles.begin(), particles.end());
+}
+
 void ParticleSystem::appendFireworks(std::list<Particle*> particles)
 {
 	if (_gravity_gen != nullptr)
@@ -252,7 +264,7 @@ void ParticleSystem::generateGravity()
 {
 	if (_gravity_gen == nullptr)
 	{
-		_gravity_gen = new GravityForceGenerator(Vector3(0, -20, 0));
+		_gravity_gen = new GravityForceGenerator(Vector3(0, -10, 0));
 
 		for (auto p : _particles)
 		{
