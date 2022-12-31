@@ -277,6 +277,8 @@
     <ClCompile Include="objects\ForceGenerators\WhirlwindForceGenerator.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="objects\Crosshair.h" />
+    <ClInclude Include="objects\Gun.h" />
     <ClInclude Include="objects\MySimulationEventCallback.h" />
     <ClInclude Include="objects\Particles\Enemy.h" />
     <ClInclude Include="objects\BulletSystem.h" />

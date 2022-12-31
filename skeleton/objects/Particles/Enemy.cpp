@@ -1,10 +1,11 @@
 #include "Enemy.h"
 
-EnemyClass::EnemyClass(physx::PxScene* scene, physx::PxPhysics* physics, MyCharacterController* player, Vector3 pos, float size, float speed, ParticleSystem* pSys) :
+EnemyClass::EnemyClass(physx::PxScene* scene, physx::PxPhysics* physics, MyCharacterController* player, Vector3 pos, float size, float speed, int hp, ParticleSystem* pSys) :
 	RigidParticle(scene, physics, false, pos, Vector3(0), Vector3(0), 0.999f, size, Color(0.2f, 0.2f, 0.2f, 1), -1, -1, 1.5, Capsule, Vector3(0.5, 1, 0.5))
 {
 	_speed = speed;
 	_player = player;
+	_hp = hp;
 
 	auto q = PxQuat(PxHalfPi, PxVec3(0, 0, 1));
 
@@ -24,6 +25,18 @@ EnemyClass::EnemyClass(physx::PxScene* scene, physx::PxPhysics* physics, MyChara
 	_death_gen2->setParticle(p2);
 
 	_pSys = pSys;
+
+
+	std::function<void(Particle*)> callback = [this](Particle* other) {
+		if (other != nullptr && other->getType() == Proyectile)
+		{
+			_hp -= other->getDamage();
+
+			if (_hp <= 0)
+				setAlive(false);
+		}
+	};
+	setCollisionCallback(callback);
 }
 
 EnemyClass::~EnemyClass()

@@ -54,11 +54,14 @@ public:
 	}
 
 	//constructor
-	RigidParticle(physx::PxScene* scene_, physx::PxPhysics* physics_, bool static_, Vector3 Pos, Vector3 Vel, Vector3 a_, float damping_, float scale_, Color color_, float lifeTime_ = -1, float lifeDist_ = -1, float m_ = 0, ParticleShape shape_ = ParticleShape::Sphere, Vector3 dimensions_ = Vector3(1))
+	RigidParticle(physx::PxScene* scene_, physx::PxPhysics* physics_, bool static_, Vector3 Pos, Vector3 Vel, Vector3 a_, float damping_, float scale_, Color color_, float lifeTime_ = -1, float lifeDist_ = -1, float m_ = 0, ParticleShape shape_ = ParticleShape::Sphere, Vector3 dimensions_ = Vector3(1), bool trail = false, int trailN = 0)
 	{
 		scene = scene_;
 		physics = physics_;
 		_static = static_;
+
+		hasTrail = trail;
+		trailNum = trailN;
 
 		//params
 		force = Vector3(0);
@@ -159,11 +162,38 @@ public:
 				alive = false;
 			}
 		}
+
+		if (hasTrail)
+		{
+			auto n = _trail.size();
+
+			if (n >= trailNum)
+			{
+				auto t = _trail.front();
+				_trail.pop();
+				delete t;
+			}
+			_trail.push(cloneParticle());
+		}
 	}
 
 	void setTransform(physx::PxTransform& tr) 
 	{
 		pose = tr;
+	}
+
+	Particle* cloneParticle(ParticleShape _shape = None)
+	{
+		Particle* p;
+		if (_shape != None)
+			p = new Particle(pose.p, vel, a, damping, scale, color, lifeTime, lifeDistance, m, _shape);
+
+		else 
+			p = new Particle(pose.p, vel, a, damping, scale, color, lifeTime, lifeDistance, m, shape);
+	
+		p->setRotation(getRotation());
+
+		return p;
 	}
 
 	virtual RigidParticle* clone(ParticleShape _shape = None) const override 
@@ -178,6 +208,13 @@ public:
 	{
 		pose.p = pos;
 		initPos = pos;
+
+		rb->setGlobalPose(pose);
+	}
+
+	virtual void setRotation(physx::PxQuat q) 
+	{
+		pose.q = q;
 
 		rb->setGlobalPose(pose);
 	}

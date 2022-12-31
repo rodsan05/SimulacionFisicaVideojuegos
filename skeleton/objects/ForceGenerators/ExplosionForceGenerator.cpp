@@ -44,6 +44,4 @@ void ExplosionForceGenerator::updateForce(Particle* particle, double t)
 
 	//apply drag force
 	particle->addForce(force);
-
-	contT += t;
 }

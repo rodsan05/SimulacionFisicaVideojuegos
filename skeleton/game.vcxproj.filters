@@ -68,6 +68,8 @@
     <ClInclude Include="objects\BulletSystem.h" />
     <ClInclude Include="objects\Particles\Enemy.h" />
     <ClInclude Include="objects\MySimulationEventCallback.h" />
+    <ClInclude Include="objects\Gun.h" />
+    <ClInclude Include="objects\Crosshair.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Render">

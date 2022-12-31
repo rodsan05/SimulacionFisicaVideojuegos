@@ -5,7 +5,7 @@ using Color = Vector4;
 
 enum ProyectileType
 {
-	Bullet, CannonBall, Laser, Misile, Fireball
+	Bullet, CannonBall, Laser, Missile, Fireball
 };
 
 class RigidProyectile : public RigidParticle
@@ -44,7 +44,7 @@ public:
 			color = Color(0.9, 0.1, 0.1, 1);
 			shape = Capsule;
 			break;
-		case Misile:
+		case Missile:
 			speed = 50;
 			gravity = 0;
 			damping = 0.999;

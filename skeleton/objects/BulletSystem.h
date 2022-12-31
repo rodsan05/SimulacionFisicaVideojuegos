@@ -2,22 +2,23 @@
 #include "ForceRegistry.hpp"
 #include "Particles/RigidParticle.h"
 #include "IncludeFiles/ForceGeneratorsIncludes.h"
+#include "ParticleGenerators/GaussianParticleGenerator.h"
+#include "Gun.h"
 
 #include <vector>
-
-enum ProyectileType
-{
-	Bullet, CannonBall, Laser, Misile, Fireball
-};
+#include "ParticleSystem.h"
 
 class BulletSystem
 {
 public:
-	BulletSystem(physx::PxScene* scene, physx::PxPhysics* physics);
+	BulletSystem(physx::PxScene* scene, physx::PxPhysics* physics, ParticleSystem* pSys);
 	virtual ~BulletSystem();
 
 	void update(double t);
-	void shoot(ProyectileType ammo);
+	void shoot();
+
+	void changeAmmo(ProyectileType ammo);
+	ProyectileType getCurrentAmmo();
 
 	void killAllParticles();
 
@@ -30,6 +31,8 @@ protected:
 	ForceRegistry* _force_registry;
 	std::list<ForceGenerator*> _force_generators;
 	std::list<Particle*> _particles;
+
+	ParticleSystem* _pSys;
 
 	ProyectileType _currAmmo;
 

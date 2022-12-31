@@ -1,8 +1,8 @@
 #include "ParticleSystem.h"
 #include "IncludeFiles/ParticleGeneratorsIncludes.h"
 
-ParticleSystem::ParticleSystem(physx::PxScene* scene, physx::PxPhysics* physics, int maxParticles) : _gravity_gen(nullptr), _wind_gen(nullptr), _whirlwind_gen(nullptr), _firework_gen(nullptr),
-_explosion_gen(nullptr), _reverse_gravity_gen(nullptr), _scene(scene), _physics(physics)
+ParticleSystem::ParticleSystem(physx::PxScene* scene, physx::PxPhysics* physics, MyCharacterController* charControl, int maxParticles) : _gravity_gen(nullptr), _wind_gen(nullptr), _whirlwind_gen(nullptr), _firework_gen(nullptr),
+_explosion_gen(nullptr), _reverse_gravity_gen(nullptr), _scene(scene), _physics(physics), _charController(charControl)
 {
 	_force_registry = new ForceRegistry();
 	_maxParticles = maxParticles;
@@ -313,20 +313,26 @@ void ParticleSystem::generateWhirlwind()
 	}
 }
 
-void ParticleSystem::generateExplosion()
+void ParticleSystem::generateExplosion(Vector3 pos)
 {
 	if (_explosion_gen != nullptr)
 	{
 		_force_registry->deleteGeneratorRegistry(_explosion_gen);
 		delete _explosion_gen;
+
+		_force_registry->deleteGeneratorRegistry(_player_explosion_gen);
+		delete _player_explosion_gen;
 	}
 
-	_explosion_gen = new ExplosionForceGenerator(Vector3(0, 0, 0), 100, 100000);
+	_explosion_gen = new ExplosionForceGenerator(pos, 10, 100000);
 
 	for (auto p : _particles)
 	{
 		_force_registry->addRegistry(_explosion_gen, p);
 	}
+
+	_player_explosion_gen = new ExplosionForceGenerator(pos, 10, 20000);
+	_force_registry->addRegistry(_player_explosion_gen, _charController);
 }
 
 void ParticleSystem::generateSpringDemo()

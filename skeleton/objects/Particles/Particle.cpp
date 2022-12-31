@@ -1,12 +1,15 @@
 #include "Particle.h"
 
-Particle::Particle() : vel(), damping(), a(), pose(), color(), renderItem(), lifeTime(), m(), scale(), iniTime(), lifeDistance(), _type(Default)
+Particle::Particle() : vel(Vector3(0)), damping(0.999f), a(Vector3(0)), pose(), color(Color(1)), renderItem(), lifeTime(-1), m(1), scale(1), iniTime(0), lifeDistance(-1), _type(Default), hasTrail(false)
 {
 }
 
-Particle::Particle(Vector3 Pos, Vector3 Vel, Vector3 a_, float damping_, float scale_, Color color_, float lifeTime_, float lifeDist_, float m_, ParticleShape shape_, Vector3 dimensions_)
+Particle::Particle(Vector3 Pos, Vector3 Vel, Vector3 a_, float damping_, float scale_, Color color_, float lifeTime_, float lifeDist_, float m_, ParticleShape shape_, Vector3 dimensions_, bool trail, int trailN)
 {
 	force = Vector3(0);
+
+	hasTrail = trail;
+	trailNum = trailN;
 
 	scale = scale_;
 	vel = Vel;
@@ -39,7 +42,15 @@ Particle::Particle(Vector3 Pos, Vector3 Vel, Vector3 a_, float damping_, float s
 
 Particle::~Particle()
 {
-	DeregisterRenderItem(renderItem);
+	if (renderItem != nullptr)
+		DeregisterRenderItem(renderItem);
+
+	while (!_trail.empty()) 
+	{
+		auto t = _trail.front();
+		_trail.pop();
+		delete t;
+	}
 }
 
 bool Particle::isAlive()
@@ -117,6 +128,19 @@ void Particle::integrate(double t)
 			alive = false;
 		}
 	}
+
+	if (hasTrail) 
+	{
+		auto n = _trail.size();
+
+		if (n >= trailNum) 
+		{
+			auto t = _trail.front();
+			_trail.pop();
+			delete t;
+		}
+		_trail.push(clone());
+	}
 }
 
 Particle* Particle::clone(ParticleShape _shape) const
@@ -131,6 +155,11 @@ void Particle::setPos(Vector3 pos_)
 {
 	pose.p = pos_;
 	initPos = pos_;
+}
+
+void Particle::setRotation(physx::PxQuat q)
+{
+	pose.q = q;
 }
 
 void Particle::setVel(Vector3 vel_)

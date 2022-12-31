@@ -7,7 +7,7 @@
 class EnemyClass : public RigidParticle
 {
 public:
-	EnemyClass(physx::PxScene* scene, physx::PxPhysics* physics, MyCharacterController* player, Vector3 pos, float size, float speed, ParticleSystem* pSys);
+	EnemyClass(physx::PxScene* scene, physx::PxPhysics* physics, MyCharacterController* player, Vector3 pos, float size, float speed, int hp, ParticleSystem* pSys);
 	virtual ~EnemyClass();
 
 	virtual void integrate(double t) override;
@@ -15,6 +15,7 @@ public:
 protected:
 	MyCharacterController* _player;
 	float _speed;
+	int _hp;
 
 	ParticleGenerator* _death_gen1;
 	ParticleGenerator* _death_gen2;

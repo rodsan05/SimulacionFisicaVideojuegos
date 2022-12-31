@@ -20,9 +20,9 @@ public:
 		RigidParticle* rigidParticle1 = (RigidParticle*)actor1->userData;
 		RigidParticle* rigidParticle2 = (RigidParticle*)actor2->userData;
 
-		if (rigidParticle1->isAlive()) 
+		if (rigidParticle1 != nullptr && rigidParticle1->isAlive()) 
 			rigidParticle1->onCollisionCallback(rigidParticle2);
-		if (rigidParticle2->isAlive()) 
+		if (rigidParticle2 != nullptr && rigidParticle2->isAlive())
 			rigidParticle2->onCollisionCallback(rigidParticle1);
 	}
 

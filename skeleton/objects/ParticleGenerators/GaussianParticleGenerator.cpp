@@ -76,7 +76,7 @@ std::list<Particle*> GaussianParticleGenerator::generateParticles()
 				{
 					auto m = rand() % 1000 + 100;
 
-					p->setMass(m / 200.0f);
+					p->setMass(m / 2000.0f);
 					p->setScale(m / 2000.0f);
 				}
 				if (_randomColor)

@@ -3,7 +3,7 @@
 
 enum ProyectileType
 {
-	Bullet, CannonBall, Laser, Misile, Fireball
+	Bullet, CannonBall, Laser, Missile, Fireball
 };
 
 class Proyectile : public Particle
@@ -37,7 +37,7 @@ public:
 			radius = 1;
 			lifeTime = 2000;
 			break;
-		case Misile:
+		case Missile:
 			speed = 50;
 			gravity = 0;
 			damping = 0.999;

@@ -16,6 +16,8 @@
 #include "objects/MyCharacterController.h"
 #include "objects/MySimulationEventCallback.h"
 #include "objects/BulletSystem.h"
+#include "objects/Gun.h"
+#include "objects/Crosshair.h"
 
 
 
@@ -46,6 +48,9 @@ BulletSystem* bs;
 MyCharacterController* characterControl;
 ForceRegistry* forceRegistry;
 
+Gun* gun;
+Crosshair* crosshair;
+
 std::vector<EnemyClass*> enemies;
 
 bool keys[256];  // array to track the state of each key
@@ -67,15 +72,9 @@ void createScene()
 	block = new RigidParticle(gScene, gPhysics, true, Vector3(0, -5 + 5, 40 + 4), Vector3(0), Vector3(0), 0, 40, Color(0.9, 0.9, 0.9, 1), -1, -1, 0, Prism, Vector3(1.2, 0.2, 0.1));
 	particles.push_back(block);
 
-	auto enemy = new EnemyClass(gScene, gPhysics, characterControl, Vector3(20, -1, 20), 2, 2, ps);
+	auto enemy = new EnemyClass(gScene, gPhysics, characterControl, Vector3(20, -1, 20), 2, 2, 5, ps);
 	enemy->setType(Enemy);
 	enemies.push_back(enemy);
-
-	std::function<void(Particle*)> callback = [enemy](Particle* other) {
-		if (other->getType() == Proyectile)
-			enemy->setAlive(false);
-	};
-	enemy->setCollisionCallback(callback);
 
 	/*block = new RigidParticle(gScene, gPhysics, true, Vector3(4, -5 + 10, 16), Vector3(0), Vector3(0), 0, 10, Color(0.9, 0, 0.8, 1), -1, -1, 0, Prism, Vector3(0.5, 1, 0.5));
 	particles.push_back(block);
@@ -126,9 +125,12 @@ void initPhysics(bool interactive)
 	gScene->setSimulationEventCallback(callback);
 
 	characterControl = new MyCharacterController(manager, GetCamera(), Vector3(0, 10, 0), Vector3(0, -10, 0), 5, 10000, gPhysics->createMaterial(0.5f, 0.5f, 0.5f));
-	ps = new ParticleSystem(gScene, gPhysics, 30);
+	ps = new ParticleSystem(gScene, gPhysics, characterControl, 300);
 	ps->generateGravity();
-	bs = new BulletSystem(gScene, gPhysics);
+	bs = new BulletSystem(gScene, gPhysics, ps);
+
+	gun = new Gun(bs->getCurrentAmmo());
+	crosshair = new Crosshair();
 
 	forceRegistry = new ForceRegistry();
 
@@ -142,15 +144,31 @@ void handleKeyboard()
 	if (keys['q'])
 		ps->clearAllGenerators();
 	else if (keys['b'])
-		bs->shoot(Bullet);
-	else if (keys['1'])
-		ps->createParticleGenerator(Hormigas);
-	else if (keys['2'])
-		ps->createParticleGenerator(Cubo);
-	else if (keys['3'])
-		ps->createParticleGenerator(Sangre);
-	else if (keys['4'])
-		ps->createParticleGenerator(Humo);
+		bs->shoot();
+	else if (keys['1'] && bs->getCurrentAmmo() != Bullet)
+	{
+		bs->changeAmmo(Bullet);
+		delete gun;
+		gun = new Gun(Bullet);
+	}
+	else if (keys['2'] && bs->getCurrentAmmo() != CannonBall)
+	{
+		bs->changeAmmo(CannonBall);
+		delete gun;
+		gun = new Gun(Missile);
+	}
+	else if (keys['3'] && bs->getCurrentAmmo() != Laser)
+	{
+		bs->changeAmmo(Laser);
+		delete gun;
+		gun = new Gun(Laser);
+	}
+	else if (keys['4'] && bs->getCurrentAmmo() != Missile)
+	{
+		bs->changeAmmo(Missile);
+		delete gun;
+		gun = new Gun(Missile);
+	}
 	else if (keys['5'])
 		ps->createParticleGenerator(RandomMass);
 	else if (keys['6'])
@@ -214,9 +232,14 @@ void stepPhysics(bool interactive, double t)
 	PX_UNUSED(interactive);
 
 	handleKeyboard();
+	if (gun != nullptr)
+		gun->updateAngle();
+
+	crosshair->updateAngle();
 
 	gScene->simulate(t);
 	gScene->fetchResults(true);
+
 
 	for (int i = 0; i < enemies.size(); i++)
 	{
@@ -295,7 +318,7 @@ void mousePress(int button, int state, int x, int y)
 {
 	if (button == 0 && state == 1) 
 	{
-		bs->shoot(Bullet);
+		bs->shoot();
 	}
 }
 

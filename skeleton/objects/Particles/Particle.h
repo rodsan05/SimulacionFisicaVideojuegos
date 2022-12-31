@@ -2,6 +2,8 @@
 #include "../../core.hpp"
 #include "../../RenderUtils.hpp"
 
+#include <queue>
+
 using Color = Vector4;
 
 #define NumOfShapes 5;
@@ -16,7 +18,7 @@ class Particle
 {
 public:
 	Particle();
-	Particle(Vector3 Pos, Vector3 Vel, Vector3 a_, float damping_, float scale_, Color color_, float lifeTime_, float lifeDist_, float m_ = 0, ParticleShape shape_ = ParticleShape::Sphere, Vector3 dimensions_ = Vector3(1));
+	Particle(Vector3 Pos, Vector3 Vel, Vector3 a_, float damping_, float scale_, Color color_, float lifeTime_, float lifeDist_, float m_ = 0, ParticleShape shape_ = ParticleShape::Sphere, Vector3 dimensions_ = Vector3(1), bool trail = false, int trailN = 0);
 	virtual ~Particle();
 
 	bool isAlive();
@@ -27,6 +29,7 @@ public:
 	virtual Particle* clone(ParticleShape _shape = None) const;
 
 	virtual void setPos(Vector3 pos);
+	virtual void setRotation(physx::PxQuat q);
 	void setVel(Vector3 vel);
 
 	void setLifeTime(float time);
@@ -39,7 +42,7 @@ public:
 
 	virtual void onDeath() {};
 
-	void deregisterRender();
+	virtual void deregisterRender();
 
 	virtual void clearForce();
 	virtual void addForce(const Vector3& f);
@@ -50,6 +53,7 @@ public:
 	float getMass() { return m; };
 	Vector3 getVel() { return vel; };
 	Vector3 getPos() { return pose.p; };
+	physx::PxQuat getRotation() { return pose.q; };
 
 	void setType(ParticleType t)
 	{
@@ -86,6 +90,16 @@ public:
 		volume = vol;
 	}
 
+	int getDamage() 
+	{
+		return damage;
+	}
+
+	void setDamage(int dmg) 
+	{
+		damage = dmg;
+	}
+
 protected:
 
 	void setParticle(Vector3 Pos, Vector3 Vel, Vector3 a_, float damping_, float scale_, Color color, float lifeTime_, float lifeDist_, float m_ = 0);
@@ -119,5 +133,11 @@ protected:
 	bool _static = false;
 
 	ParticleType _type;
+
+	int damage = 0;
+
+	bool hasTrail;
+	int trailNum = 0;
+	std::queue<Particle*> _trail;
 };
 

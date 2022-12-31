@@ -5,6 +5,7 @@
 #include "Particles/Firework.h"
 #include "IncludeFiles/ForceGeneratorsIncludes.h"
 #include "Constraints/ParticleLink.h"
+#include "MyCharacterController.h"
 
 #include <string>
 
@@ -16,7 +17,7 @@ enum ParticleGenType
 class ParticleSystem
 {
 public:
-	ParticleSystem(physx::PxScene* scene, physx::PxPhysics* physics, int maxParticles = 1000);
+	ParticleSystem(physx::PxScene* scene, physx::PxPhysics* physics, MyCharacterController* charControl, int maxParticles = 1000);
 	virtual ~ParticleSystem();
 
 	void createParticleGenerator(ParticleGenType type);
@@ -37,7 +38,7 @@ public:
 	void generateReverseGravity();
 	void generateWind();
 	void generateWhirlwind();
-	void generateExplosion();
+	void generateExplosion(Vector3 pos = Vector3(0));
 
 	void generateSpringDemo();
 	void generateSlinky();
@@ -73,5 +74,8 @@ protected:
 	WindForceGenerator* _wind_gen;
 	WhirlwindForceGenerator* _whirlwind_gen;
 	ExplosionForceGenerator* _explosion_gen;
+	ExplosionForceGenerator* _player_explosion_gen;
+
+	MyCharacterController* _charController;
 };
 
