@@ -97,7 +97,7 @@ void BulletSystem::shoot()
 		gravity = 0;
 		damping = 0.1;
 		scale = .5;
-		lifeTime = 2000;
+		lifeTime = 1000;
 		color = Color(0.9, 0.1, 0.1, 1);
 		shape = Capsule;
 		dmg = 5;
@@ -173,6 +173,13 @@ void BulletSystem::shoot()
 				auto random = rand() % 3;
 				_pSys->generateFireworksSystem(FireworkType(random), p->getPos());
 			}
+		};
+	}
+
+	else if (_currAmmo == Laser) 
+	{
+		callback = [p](Particle* other) {
+			
 		};
 	}
 
