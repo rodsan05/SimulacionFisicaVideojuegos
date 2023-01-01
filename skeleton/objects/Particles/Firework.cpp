@@ -16,7 +16,7 @@ Particle* Firework::clone(ParticleShape _shape) const
 	Firework* f = new Firework(_pSys, pose.p, vel, a, damping, scale, color, lifeTime, lifeDistance, m);
 	
 	for (auto g : _gens)
-		f->addParticleGen(g.get());
+		f->addParticleGen(g);
 
 	return f;
 }
@@ -36,7 +36,7 @@ void Firework::onDeath()
 	_pSys->appendFireworks(particles);
 }
 
-void Firework::addParticleGen(ParticleGenerator* gen)
+void Firework::addParticleGen(std::shared_ptr<ParticleGenerator> gen)
 {
-	_gens.push_back(std::shared_ptr<ParticleGenerator>(gen));
+	_gens.push_back(gen);
 }

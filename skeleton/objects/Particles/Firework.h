@@ -15,7 +15,7 @@ public:
 
 	void onDeath() override;
 
-	void addParticleGen(ParticleGenerator* gen);
+	void addParticleGen(std::shared_ptr<ParticleGenerator> gen);
 
 protected:
 	ParticleSystem* _pSys;

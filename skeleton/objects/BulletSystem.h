@@ -24,7 +24,8 @@ public:
 
 protected:
 
-	const std::vector<int> SHOOT_CD = { 200, 1000, 500, 2000 };
+	const int N_AMMO = 5;
+	const std::vector<int> SHOOT_CD = { 200, 1000, 500, 2000, 1000 };
 
 	physx::PxScene* _scene;
 	physx::PxPhysics* _physics;
@@ -36,7 +37,7 @@ protected:
 
 	ProyectileType _currAmmo;
 
-	std::vector<int> _shootTime = std::vector<int>(4, 0);
-	std::vector<bool> _shoot_on_cd = std::vector<bool>(4, false);
+	std::vector<int> _shootTime = std::vector<int>(N_AMMO, 0);
+	std::vector<bool> _shoot_on_cd = std::vector<bool>(N_AMMO, false);
 };
 

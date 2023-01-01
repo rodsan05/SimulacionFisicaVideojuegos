@@ -130,6 +130,8 @@ void ParticleSystem::update(double t)
 		}
 		else
 		{
+			_force_registry->deleteParticleRegistry(p);
+
 			p->onDeath();
 			delete p;
 			iteradorF = _firework_pool.erase(iteradorF);
@@ -171,39 +173,63 @@ ParticleGenerator* ParticleSystem::getParticleGenerator(std::string name)
 	return nullptr;
 }
 
-void ParticleSystem::generateFireworksSystem(FireworkType ft)
+void ParticleSystem::generateFireworksSystem(FireworkType ft, Vector3 pos)
 {
-	Firework* f = new Firework(this, Vector3(0, 0, 0), Vector3(0, 30, 0), Vector3(0, 0, 0), 0.999f, 1, Color(0.85, 0.03, 0.16, 1), 1000, -1, 1);
-	Firework* f2 = new Firework(this, Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0), 0.999f, 0.8f, Color(0.9, 0.36, 0.03, 1), 500, -1, 1);
-	Firework* f3 = new Firework(this, Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0), 0.999f, 0.5f, Color(0.9, 0.57, 0.03, 1), 500, -1, 1);
+	auto random1 = rand() % 100 + 10;
+	auto random2 = rand() % 100 + 10;
+	auto random3 = rand() % 100 + 10;
+	auto color1 = Color(random1 / 100.0f, random2 / 100.0f, random3 / 100.0f, 1);
+
+	random1 = rand() % 100 + 10;
+	random2 = rand() % 100 + 10;
+	random3 = rand() % 100 + 10;
+	auto color2 = Color(random1 / 100.0f, random2 / 100.0f, random3 / 100.0f, 1);
+
+	random1 = rand() % 100 + 10;
+	random2 = rand() % 100 + 10;
+	random3 = rand() % 100 + 10;
+	auto color3 = Color(random1 / 100.0f, random2 / 100.0f, random3 / 100.0f, 1);
+
+	Firework* f = new Firework(this, pos, Vector3(0, 0, 0), Vector3(0, 0, 0), 0.999f, 0.5f, Color(0.85, 0.03, 0.16, 1), 1, -1, 1);
+	Firework* f2 = new Firework(this, pos, Vector3(0, 0, 0), Vector3(0, 0, 0), 0.999f, 0.4f, color1, 100, -1, 1);
+	Firework* f3 = new Firework(this, pos, Vector3(0, 0, 0), Vector3(0, 0, 0), 0.999f, 0.3f, color2, 50, -1, 1);
+	Firework* f4 = new Firework(this, pos, Vector3(0, 0, 0), Vector3(0, 0, 0), 0.999f, 0.2f, color3, 50, -1, 1);
 
 	f2->deregisterRender();
 	f3->deregisterRender();
+	f4->deregisterRender();
 
 	ParticleGenerator* fireworkGen1;
 	ParticleGenerator* fireworkGen2;
+	ParticleGenerator* fireworkGen3;
 
 	if (ft == Circle)
 	{
 		fireworkGen1 = new CircleParticleGenerator(6, Vector3(0), 10, Vector3(0));
 		fireworkGen2 = new CircleParticleGenerator(10, Vector3(0), 10, Vector3(0));
+		fireworkGen3 = new CircleParticleGenerator(8, Vector3(0), 10, Vector3(0));
 	}
 	else if (ft == SphereFirework)
 	{
-		fireworkGen1 = new SphereParticleGenerator(100, Vector3(0), 10, Vector3(0));
+		fireworkGen1 = new SphereParticleGenerator(50, Vector3(0), 10, Vector3(0));
 		fireworkGen2 = new SphereParticleGenerator(5, Vector3(0), 10, Vector3(0));
+		fireworkGen3 = new SphereParticleGenerator(2, Vector3(0), 10, Vector3(0));
 	}
 	else if (ft == Star)
 	{
 		fireworkGen1 = new StarParticleGenerator(60, Vector3(0), 10, Vector3(0), 6, 3, 1);
 		fireworkGen2 = new StarParticleGenerator(5, Vector3(0), 10, Vector3(0), 5, 3, 1);
+		fireworkGen3 = new StarParticleGenerator(5, Vector3(0), 10, Vector3(0), 5, 3, 1);
 	}
 
 	fireworkGen1->setParticle(f2);
-	f->addParticleGen(fireworkGen1);
+	f->addParticleGen(std::shared_ptr<ParticleGenerator>(fireworkGen1));
 
 	fireworkGen2->setParticle(f3);
-	f2->addParticleGen(fireworkGen2);
+	f2->addParticleGen(std::shared_ptr<ParticleGenerator>(fireworkGen2));
+
+	fireworkGen3->setParticle(f4);
+	f3->addParticleGen(std::shared_ptr<ParticleGenerator>(fireworkGen3));
 
 	_firework_pool.push_back(f);
 }

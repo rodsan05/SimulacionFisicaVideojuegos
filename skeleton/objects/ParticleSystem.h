@@ -28,7 +28,7 @@ public:
 
 	ParticleGenerator* getParticleGenerator(std::string name);
 
-	void generateFireworksSystem(FireworkType ft);
+	void generateFireworksSystem(FireworkType ft, Vector3 pos = Vector3(0));
 
 	void appendParticles(std::list<Particle*> particles);
 	void appendParticlesWithGravity(std::list<Particle*> particles, float g);

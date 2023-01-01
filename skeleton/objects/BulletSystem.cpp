@@ -46,7 +46,7 @@ void BulletSystem::update(double t)
 	//cooldown
 	auto currTime = glutGet(GLUT_ELAPSED_TIME);
 
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < N_AMMO; i++)
 	{
 		if (_shoot_on_cd[i] && currTime - _shootTime[i] > SHOOT_CD[i])
 		{
@@ -115,7 +115,16 @@ void BulletSystem::shoot()
 		shape = Capsule;
 		dmg = 3;
 		break;
-	case Fireball:
+	case Firework:
+		m = 3;
+		speed = 50;
+		gravity = 0;
+		damping = 0;
+		scale = 1;
+		lifeTime = 4000;
+		color = Color(0.9, 0, 0, 1);
+		shape = Capsule;
+		dmg = 5;
 		break;
 	default:
 		break;
@@ -150,6 +159,19 @@ void BulletSystem::shoot()
 
 				generator->setPos(p->getPos());
 				_pSys->appendParticles(generator->generateParticles());
+			}
+		};
+	}
+
+	else if (_currAmmo == Firework)
+	{
+		callback = [p, this](Particle* other) {
+			if (other != nullptr && other->getType() != Player && other->getType() != Proyectile)
+			{
+				p->setAlive(false);
+
+				auto random = rand() % 3;
+				_pSys->generateFireworksSystem(FireworkType(random), p->getPos());
 			}
 		};
 	}

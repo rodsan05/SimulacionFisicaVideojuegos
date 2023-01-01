@@ -169,9 +169,13 @@ void handleKeyboard()
 		delete gun;
 		gun = new Gun(Missile);
 	}
-	else if (keys['5'])
-		ps->createParticleGenerator(RandomMass);
-	else if (keys['6'])
+	else if (keys['5'] && bs->getCurrentAmmo() != Firework)
+	{
+		bs->changeAmmo(Firework);
+		delete gun;
+		gun = new Gun(Firework);
+	}
+	else if (keys['9'])
 		ps->createParticleGenerator(RigidDemo);
 	else if (keys['c'])
 		ps->generateFireworksSystem(Circle);

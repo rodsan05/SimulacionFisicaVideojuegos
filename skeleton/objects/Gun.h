@@ -5,7 +5,7 @@ using namespace physx;
 
 enum ProyectileType
 {
-	Bullet, CannonBall, Laser, Missile, Fireball
+	Bullet, CannonBall, Laser, Missile, Firework
 };
 
 class Gun : public Particle
@@ -37,6 +37,13 @@ public:
 			partShape2 = createShape(Prism, 0.01, Vector3(0.3, 0.3, 1));;
 
 			color = Color(0, 0, 0, 1);
+		}
+		else if (_type == Firework)
+		{
+			partShape = createShape(Prism, 0.6, Vector3(0.3, 0.3, 1));
+			partShape2 = createShape(Prism, 0.01, Vector3(0.3, 0.3, 1));;
+
+			color = Color(0.9, 0.1, 0.1, 1);
 		}
 
 		renderItem = new RenderItem(partShape, &pose, color);
