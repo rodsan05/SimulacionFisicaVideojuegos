@@ -160,7 +160,7 @@ void initPhysics(bool interactive)
 	MySimulationEventCallback* callback = new MySimulationEventCallback();
 	gScene->setSimulationEventCallback(callback);
 
-	characterControl = new MyCharacterController(manager, GetCamera(), Vector3(0, 10, 0), Vector3(0, -10, 0), 5, gPhysics->createMaterial(0.5f, 0.5f, 0.5f));
+	characterControl = new MyCharacterController(manager, GetCamera(), Vector3(0, 5, -20), Vector3(0, -10, 0), 5, gPhysics->createMaterial(0.5f, 0.5f, 0.5f));
 	ps = new ParticleSystem(gScene, gPhysics, characterControl, 300);
 	ps->generateGravity();
 	bs = new BulletSystem(gScene, gPhysics, ps);
