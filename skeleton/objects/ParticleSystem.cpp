@@ -291,7 +291,7 @@ void ParticleSystem::generateReverseGravity()
 {
 	if (_reverse_gravity_gen == nullptr)
 	{
-		_reverse_gravity_gen = new GravityForceGenerator(Vector3(0, 10, 0));
+		_reverse_gravity_gen = new GravityForceGenerator(Vector3(0, 100, 0));
 
 		for (auto p : _particles)
 		{
@@ -304,7 +304,7 @@ void ParticleSystem::generateWind()
 {
 	if (_wind_gen == nullptr)
 	{
-		_wind_gen = new WindForceGenerator(Vector3(-10, 0, 0), 1, 0);
+		_wind_gen = new WindForceGenerator(Vector3(-10, 0, 0), 10, 0);
 
 		for (auto p : _particles)
 		{
@@ -317,7 +317,7 @@ void ParticleSystem::generateWhirlwind()
 {
 	if (_whirlwind_gen == nullptr)
 	{
-		_whirlwind_gen = new WhirlwindForceGenerator(Vector3(0, 0, 0), 1, 1, 0, 0.15);
+		_whirlwind_gen = new WhirlwindForceGenerator(Vector3(0, 0, 0), 10, 1, 0, 0.15);
 
 		for (auto p : _particles)
 		{

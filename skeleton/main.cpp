@@ -99,7 +99,7 @@ void createScene()
 	enemy->setType(Enemy);
 	enemies.push_back(enemy);
 
-	enemy = new EnemyClass(gScene, gPhysics, characterControl, Vector3(80, -1 + 40*0.7, 20), 2, 2, 5, ps, true);
+	enemy = new EnemyClass(gScene, gPhysics, characterControl, Vector3(80, -1 + 40*0.7, 20), 2, 2, 5, ps);
 	enemy->setType(Enemy);
 	enemies.push_back(enemy);
 
@@ -213,17 +213,7 @@ void handleKeyboard()
 	}
 	else if (keys['9'])
 		ps->createParticleGenerator(RigidDemo);
-	else if (keys['c'])
-		ps->generateFireworksSystem(Circle);
-	else if (keys['e'])
-		ps->generateFireworksSystem(SphereFirework);
-	else if (keys['x'])
-		ps->generateFireworksSystem(Star);
-	else if (keys['g'])
-		ps->generate();
 	else if (keys['u'])
-		ps->generateGravity();
-	else if (keys['j'])
 		ps->generateReverseGravity();
 	else if (keys['i'])
 		ps->generateWind();

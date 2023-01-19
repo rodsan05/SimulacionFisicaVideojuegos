@@ -4,7 +4,7 @@
 
 class SpringForceGenerator : public ForceGenerator {
 public:
-	SpringForceGenerator(double k, double resting_length, Particle* other, double minLenght = 0.01, double maxLenght = 100, double ruptureLenght = 150, bool goma = false) :
+	SpringForceGenerator(double k, double resting_length, Particle* other, double minLenght = 0.1, double maxLenght = 100, double ruptureLenght = 150, bool goma = false) :
 		_resting_length(resting_length), _k(k), _other(other), _goma(goma), _max_length(maxLenght), _min_length(minLenght), _rupture_length(ruptureLenght) {}
 
 	virtual ~SpringForceGenerator() {}
