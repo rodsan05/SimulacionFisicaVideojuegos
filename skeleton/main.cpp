@@ -60,30 +60,66 @@ void createScene()
 	auto floor = new RigidParticle(gScene, gPhysics, true, Vector3(0, -5, 0), Vector3(0), Vector3(0), 0, 40, Color(0.9, 0.9, 0.9, 1), -1, -1, 0, Plane);
 	particles.push_back(floor);
 
-	auto block = new RigidParticle(gScene, gPhysics, true, Vector3(-40 - 4, -5 + 5, 0), Vector3(0), Vector3(0), 0, 40, Color(0.9, 0.9, 0.9, 1), -1, -1, 0, Prism, Vector3(0.1, 0.2, 1));
+	floor = new RigidParticle(gScene, gPhysics, true, Vector3(40 + 40, 40*0.6, 0), Vector3(0), Vector3(0), 0, 40, Color(0.9, 0.9, 0.9, 1), -1, -1, 0, Plane);
+	particles.push_back(floor);
+
+	floor = new RigidParticle(gScene, gPhysics, true, Vector3(40 + 40 * 3, 40 * 0.6, 0), Vector3(0), Vector3(0), 0, 40, Color(0.9, 0.9, 0.9, 1), -1, -1, 0, Plane);
+	particles.push_back(floor);
+
+	floor = new RigidParticle(gScene, gPhysics, true, Vector3(40 * 6, 40 * 0.6, 0), Vector3(0), Vector3(0), 0, 40, Color(0.9, 0.9, 0.9, 1), -1, -1, 0, Plane);
+	particles.push_back(floor);
+
+	auto block = new RigidParticle(gScene, gPhysics, true, Vector3(-40 - 4, -5 + 5, 0), Vector3(0), Vector3(0), 0, 40, Color(0.9, 0.9, 0.9, 1), -1, -1, 0, Prism, Vector3(0.1, 1.5, 2));
 	particles.push_back(block);
 
-	block = new RigidParticle(gScene, gPhysics, true, Vector3(40 + 4, -5 + 5, 0), Vector3(0), Vector3(0), 0, 40, Color(0.9, 0.9, 0.9, 1), -1, -1, 0, Prism, Vector3(0.1, 0.2, 1));
+	block = new RigidParticle(gScene, gPhysics, true, Vector3(40 + 4, -5 + 5, 0), Vector3(0), Vector3(0), 0, 40, Color(0.9, 0.9, 0.9, 1), -1, -1, 0, Prism, Vector3(0.1, 0.6, 1));
 	particles.push_back(block);
 
-	block = new RigidParticle(gScene, gPhysics, true, Vector3(0, -5 + 5, -40 - 4), Vector3(0), Vector3(0), 0, 40, Color(0.9, 0.9, 0.9, 1), -1, -1, 0, Prism, Vector3(1.2, 0.2, 0.1));
+	block = new RigidParticle(gScene, gPhysics, true, Vector3(30, -5 + 5, -40 - 4), Vector3(0), Vector3(0), 0, 40, Color(0.9, 0.9, 0.9, 1), -1, -1, 0, Prism, Vector3(2.4, 1.5, 0.1));
 	particles.push_back(block);
 
-	block = new RigidParticle(gScene, gPhysics, true, Vector3(0, -5 + 5, 40 + 4), Vector3(0), Vector3(0), 0, 40, Color(0.9, 0.9, 0.9, 1), -1, -1, 0, Prism, Vector3(1.2, 0.2, 0.1));
+	block = new RigidParticle(gScene, gPhysics, true, Vector3(30, -5 + 5, 40 + 4), Vector3(0), Vector3(0), 0, 40, Color(0.9, 0.9, 0.9, 1), -1, -1, 0, Prism, Vector3(2.4, 1.5, 0.1));
 	particles.push_back(block);
 
-	auto enemy = new EnemyClass(gScene, gPhysics, characterControl, Vector3(20, -1, 20), 2, 2, 5, ps);
+	//bloques pasillo
+	block = new RigidParticle(gScene, gPhysics, true, Vector3(40*3 + 40*2, -5 + 5, -25), Vector3(0), Vector3(0), 0, 40, Color(0.9, 0.9, 0.9, 1), -1, -1, 0, Prism, Vector3(2, 1.5, 0.5));
+	particles.push_back(block);
+
+	block = new RigidParticle(gScene, gPhysics, true, Vector3(40*3 + 40*2, -5 + 5, 25), Vector3(0), Vector3(0), 0, 40, Color(0.9, 0.9, 0.9, 1), -1, -1, 0, Prism, Vector3(2, 1.5, 0.5));
+	particles.push_back(block);
+
+	block = new RigidParticle(gScene, gPhysics, true, Vector3(40*6 + 4, -5 + 5, 0), Vector3(0), Vector3(0), 0, 40, Color(0.9, 0.9, 0.9, 1), -1, -1, 0, Prism, Vector3(0.5, 1.5, 0.5));
+	particles.push_back(block);
+
+	auto enemy = new EnemyClass(gScene, gPhysics, characterControl, Vector3(20, -1, 20), 2, 2, 5, ps, true);
 	enemy->setType(Enemy);
 	enemies.push_back(enemy);
 
-	/*block = new RigidParticle(gScene, gPhysics, true, Vector3(4, -5 + 10, 16), Vector3(0), Vector3(0), 0, 10, Color(0.9, 0, 0.8, 1), -1, -1, 0, Prism, Vector3(0.5, 1, 0.5));
-	particles.push_back(block);
+	enemy = new EnemyClass(gScene, gPhysics, characterControl, Vector3(-20, -1, 20), 2, 2, 5, ps, true);
+	enemy->setType(Enemy);
+	enemies.push_back(enemy);
 
-	block = new RigidParticle(gScene, gPhysics, true, Vector3(17, -5 + 4, 5), Vector3(0), Vector3(0), 0, 4, Color(0, 0.8, 0.9, 1), -1, -1, 0, Prism, Vector3(0.75, 1, 0.25));
-	particles.push_back(block);
+	enemy = new EnemyClass(gScene, gPhysics, characterControl, Vector3(80, -1 + 40*0.7, 20), 2, 2, 5, ps, true);
+	enemy->setType(Enemy);
+	enemies.push_back(enemy);
 
-	block = new RigidParticle(gScene, gPhysics, true, Vector3(-12, -5 + 8, -7), Vector3(0), Vector3(0), 0, 8, Color(0.9, 0.8, 0, 1), -1, -1, 0, Prism, Vector3(0.65, 1, 0.35));
-	particles.push_back(block);*/
+	enemy = new EnemyClass(gScene, gPhysics, characterControl, Vector3(80, -1 + 40 * 0.7, -20), 2, 2, 5, ps);
+	enemy->setType(Enemy);
+	enemies.push_back(enemy);
+
+	enemy = new EnemyClass(gScene, gPhysics, characterControl, Vector3(150, -1 + 40 * 0.7, 0), 2, 2, 5, ps);
+	enemy->setType(Enemy);
+	enemies.push_back(enemy);
+	enemy = new EnemyClass(gScene, gPhysics, characterControl, Vector3(160, -1 + 40 * 0.7, 0), 2, 2, 5, ps);
+	enemy->setType(Enemy);
+	enemies.push_back(enemy);
+	enemy = new EnemyClass(gScene, gPhysics, characterControl, Vector3(170, -1 + 40 * 0.7, 0), 2, 2, 5, ps);
+	enemy->setType(Enemy);
+	enemies.push_back(enemy);
+
+	ps->generateSlinky(Vector3(20, -1 + 40 * 0.7, 39.8), Vector3(0, -1 + 40 * 0.7, 0));
+	ps->generateSlinky(Vector3(0, -1 + 40 * 0.7, 39.8), Vector3(0, -1 + 40 * 0.7, 0));
+
 }
 
 // Initialize physics engine
@@ -124,7 +160,7 @@ void initPhysics(bool interactive)
 	MySimulationEventCallback* callback = new MySimulationEventCallback();
 	gScene->setSimulationEventCallback(callback);
 
-	characterControl = new MyCharacterController(manager, GetCamera(), Vector3(0, 10, 0), Vector3(0, -10, 0), 5, 10000, gPhysics->createMaterial(0.5f, 0.5f, 0.5f));
+	characterControl = new MyCharacterController(manager, GetCamera(), Vector3(0, 10, 0), Vector3(0, -10, 0), 5, gPhysics->createMaterial(0.5f, 0.5f, 0.5f));
 	ps = new ParticleSystem(gScene, gPhysics, characterControl, 300);
 	ps->generateGravity();
 	bs = new BulletSystem(gScene, gPhysics, ps);
@@ -199,18 +235,6 @@ void handleKeyboard()
 		ps->clearForces();
 	else if (keys['m'])
 		ps->killAllParticles();
-	else if (keys['h'])
-		ps->generateSpringDemo();
-	else if (keys['f'])
-		ps->generateFloatingDemo();
-	else if (keys['z'])
-		ps->generateSlinky();
-	else if (keys['r'])
-		ps->generateRopeDemo();
-	else if (keys['+'])
-		ps->incrementAllSprings(1);
-	else if (keys['-'])
-		ps->decrementAllSprings(1);
 
 	if (keys['w'])
 		characterControl->setInputDirX(1);
@@ -223,9 +247,6 @@ void handleKeyboard()
 
 	else if (keys['d'])
 		characterControl->setInputDirY(1);
-
-	if (keys[' '])
-		characterControl->jump();
 }
 
 // Function to configure what happens in each step of physics
@@ -276,8 +297,8 @@ void stepPhysics(bool interactive, double t)
 	ps->update(t);
 	bs->update(t);
 
-	if (characterControl->isJumping())
-		characterControl->addForce(Vector3(0, -100, 0));
+	characterControl->addForce(Vector3(0, -100, 0));
+	
 	characterControl->integrate(t);
 }
 

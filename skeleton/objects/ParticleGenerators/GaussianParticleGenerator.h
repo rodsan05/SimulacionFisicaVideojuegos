@@ -19,8 +19,6 @@ protected:
 	float _scale, _lifeDist, _lifeTime, _m, _damping;
 
 	Color _color;
-
-	double std_dev_t;
 	
 	bool _randomMass, _randomShape, _randomColor;
 };

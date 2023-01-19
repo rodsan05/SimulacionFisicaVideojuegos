@@ -42,8 +42,6 @@ protected:
 
 	double PI = std::_Pi;
 
-	std::string _name;
-
 	int _num_particles;
 	double _generation_probability;
 

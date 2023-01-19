@@ -4,7 +4,6 @@
 #include "Particles/RigidParticle.h"
 #include "Particles/Firework.h"
 #include "IncludeFiles/ForceGeneratorsIncludes.h"
-#include "Constraints/ParticleLink.h"
 #include "MyCharacterController.h"
 
 #include <string>
@@ -26,8 +25,6 @@ public:
 	void generate();
 	void generatePerpetual();
 
-	ParticleGenerator* getParticleGenerator(std::string name);
-
 	void generateFireworksSystem(FireworkType ft, Vector3 pos = Vector3(0));
 
 	void appendParticles(std::list<Particle*> particles);
@@ -41,9 +38,8 @@ public:
 	void generateExplosion(Vector3 pos = Vector3(0));
 
 	void generateSpringDemo();
-	void generateSlinky();
+	void generateSlinky(Vector3 iniPos, Vector3 finalPos);
 	void generateFloatingDemo();
-	void generateRopeDemo();
 
 	void clearAllGenerators();
 	void clearForces();
@@ -63,11 +59,9 @@ protected:
 	std::list<Particle*> _firework_pool;
 
 	std::list<ParticleGenerator*> _particle_generators;
-	ParticleGenerator* _firework_gen;
 
 	std::list<ForceGenerator*> _force_generators;
 	std::list<SpringForceGenerator*> _spring_generators;
-	std::list<ParticleLink*> _particle_links;
 	ForceRegistry* _force_registry;
 	GravityForceGenerator* _gravity_gen;
 	GravityForceGenerator* _reverse_gravity_gen;

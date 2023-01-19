@@ -1,7 +1,7 @@
 #include "ParticleSystem.h"
 #include "IncludeFiles/ParticleGeneratorsIncludes.h"
 
-ParticleSystem::ParticleSystem(physx::PxScene* scene, physx::PxPhysics* physics, MyCharacterController* charControl, int maxParticles) : _gravity_gen(nullptr), _wind_gen(nullptr), _whirlwind_gen(nullptr), _firework_gen(nullptr),
+ParticleSystem::ParticleSystem(physx::PxScene* scene, physx::PxPhysics* physics, MyCharacterController* charControl, int maxParticles) : _gravity_gen(nullptr), _wind_gen(nullptr), _whirlwind_gen(nullptr),
 _explosion_gen(nullptr), _reverse_gravity_gen(nullptr), _scene(scene), _physics(physics), _charController(charControl)
 {
 	_force_registry = new ForceRegistry();
@@ -21,9 +21,6 @@ ParticleSystem::~ParticleSystem()
 
 	for (auto f : _spring_generators)
 		delete f;
-
-	for (auto l : _particle_links)
-		delete l;
 	
 	clearForces();
 
@@ -90,11 +87,6 @@ void ParticleSystem::update(double t)
 	generatePerpetual();
 
 	_force_registry->updateForces(t);
-
-	for (auto l : _particle_links) 
-	{
-		l->checkLimit();
-	}
 
 	auto iterador = _particles.begin();
 
@@ -166,11 +158,6 @@ void ParticleSystem::generatePerpetual()
 			}
 		}
 	}
-}
-
-ParticleGenerator* ParticleSystem::getParticleGenerator(std::string name)
-{
-	return nullptr;
 }
 
 void ParticleSystem::generateFireworksSystem(FireworkType ft, Vector3 pos)
@@ -388,35 +375,40 @@ void ParticleSystem::generateSpringDemo()
 	_particles.push_back(p3);
 }
 
-void ParticleSystem::generateSlinky()
+void ParticleSystem::generateSlinky(Vector3 iniPos, Vector3 finalPos)
 {
-	float distance = -5.0;
-	float iniY = 30;
+	float distance = (finalPos.x - iniPos.x) / 12;
 
-	auto p0 = new Particle(Vector3(0.0, iniY - distance, 0.0), Vector3(0), Vector3(0), 0.85, 1, Color(1, 1, 1, 1), -1, -1, 1);
-	auto f0 = new AnchoredSpringFG(20, .5, Vector3(0.0, iniY - 2 * distance, 0.0));
+	float iniX = iniPos.x;
+	float iniY = iniPos.y;
+	float iniZ = iniPos.z;
+
+	auto p0 = new Particle(Vector3(iniX - distance, iniY, iniZ), Vector3(0), Vector3(0), 0.85, 0.2, Color(1, 1, 1, 1), -1, -1, 1);
+	auto f0 = new AnchoredSpringFG(100, .5, Vector3(iniX - 2 * distance, iniY, iniZ));
 	_force_registry->addRegistry(f0, p0);
 	_spring_generators.push_back(f0);
 	_particles.push_back(p0);
 
 	for (int i = 0; i < 10; i += 2)
 	{
-		auto p1 = new Particle(Vector3(0.0, iniY + distance * i, 0.0), Vector3(0), Vector3(0), 0.85, 1, Color(0.9 - (i * 0.1), 0.9 - (i * 0.1), 0.9 - (i * 0.1), 1), -1, -1, 1);
-		auto p2 = new Particle(Vector3(0.0, iniY + distance * (i + 1), 0.0), Vector3(0), Vector3(0), 0.85, 1, Color(0.9 - ((i + 1) * 0.1), 0.9 - ((i + 1) * 0.1), 0.9 - ((i + 1) * 0.1), 1), -1, -1, 1);
+		auto p1 = new Particle(Vector3(iniX + distance * i, iniY, iniZ), Vector3(0), Vector3(0), 0.85, 0.2, Color(0.9 - (i * 0.1), 0.9 - (i * 0.1), 0.9 - (i * 0.1), 1), -1, -1, 1);
+		auto p2 = new Particle(Vector3(iniX + distance * (i + 1), iniY, iniZ), Vector3(0), Vector3(0), 0.85, 0.2, Color(0.9 - ((i + 1) * 0.1), 0.9 - ((i + 1) * 0.1), 0.9 - ((i + 1) * 0.1), 1), -1, -1, 1);
 
-		SpringForceGenerator* f0 = new SpringForceGenerator(20, .5, p0);
+		SpringForceGenerator* f0 = new SpringForceGenerator(100, .5, p0);
 		_force_registry->addRegistry(f0, p1);
-		SpringForceGenerator* f1 = new SpringForceGenerator(20, .5, p2);
+		SpringForceGenerator* f1 = new SpringForceGenerator(100, .5, p2);
 		_force_registry->addRegistry(f1, p1);
-		SpringForceGenerator* f2 = new SpringForceGenerator(20, .5, p1);
+		SpringForceGenerator* f2 = new SpringForceGenerator(100, .5, p1);
 		_force_registry->addRegistry(f2, p2);
 		_force_registry->addRegistry(f2, p0);
 
 		_spring_generators.push_back(f0);
 		_spring_generators.push_back(f1);
 		_spring_generators.push_back(f2);
-		_particles.push_back(p1);
-		_particles.push_back(p2);
+		std::list<Particle*> parts;
+		parts.push_back(p1);
+		parts.push_back(p2);
+		appendParticles(parts);
 
 		p0 = p2;
 	}
@@ -433,19 +425,6 @@ void ParticleSystem::generateFloatingDemo()
 
 	_force_registry->addRegistry(forceGen, p1);
 	_force_registry->addRegistry(dragGen, p1);
-	_particles.push_back(p1);
-	_particles.push_back(p2);
-}
-
-void ParticleSystem::generateRopeDemo()
-{
-	Particle* p1 = new Particle(Vector3(-12.0, 10.0, 0.0), Vector3(0), Vector3(0), 0.85, 1, Color(0.9, 0.8, 0.05, 1), -1, -1, 60);
-	Particle* p2 = new Particle(Vector3(12.0, 10.0, 0.0), Vector3(0), Vector3(0), 0.85, 1, Color(0.5, 0.5, 0.5, 1), -1, -1, 60);
-	p1->setStatic(true);
-
-	auto rope = new ParticleLink(p1, p2, 20, .5);
-	_particle_links.push_back(rope);
-
 	_particles.push_back(p1);
 	_particles.push_back(p2);
 }

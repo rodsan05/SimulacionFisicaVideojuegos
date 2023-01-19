@@ -39,7 +39,6 @@
     <ClInclude Include="RenderUtils.hpp" />
     <ClInclude Include="callbacks.hpp" />
     <ClInclude Include="objects\Particles\Particle.h" />
-    <ClInclude Include="objects\Particles\Proyectile.h" />
     <ClInclude Include="objects\ParticleGenerators\ParticleGenerator.h" />
     <ClInclude Include="objects\ParticleGenerators\GaussianParticleGenerator.h" />
     <ClInclude Include="objects\ParticleGenerators\UniformParticleGenerator.h" />
@@ -62,7 +61,6 @@
     <ClInclude Include="objects\IncludeFiles\ParticleGeneratorsIncludes.h" />
     <ClInclude Include="objects\Constraints\ParticleLink.h" />
     <ClInclude Include="objects\Particles\RigidParticle.h" />
-    <ClInclude Include="objects\ParticleGenerators\RigidParticleGenerator.h" />
     <ClInclude Include="objects\MyCharacterController.h" />
     <ClInclude Include="objects\Particles\RigidProyectile.h" />
     <ClInclude Include="objects\BulletSystem.h" />
